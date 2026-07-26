@@ -19,6 +19,20 @@
         "source_file": "CLAUDE.md"
       },
       {
+        "id": "claude_git_lifecycle_protocols",
+        "label": "Git Development Lifecycle Protocols",
+        "nodes": [
+          "claude_git_branching_workflow",
+          "claude_feature_branch_protocol",
+          "claude_auto_merge_protocol",
+          "claude_autonomous_workflow_protocol"
+        ],
+        "relation": "form",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "CLAUDE.md"
+      },
+      {
         "id": "prd_realtime_transaction_flow",
         "label": "Realtime Transaction Flow (Buyer -> Server -> DB -> Merchant -> Buyer)",
         "nodes": [
@@ -34,22 +48,420 @@
         "source_file": "prd.md"
       },
       {
-        "id": "claude_git_lifecycle_protocols",
-        "label": "Git Development Lifecycle Protocols",
+        "id": "buyer_purchase_flow",
+        "label": "Buyer Purchase Flow (Discovery -> Etalase -> Checkout -> Tracking)",
         "nodes": [
-          "claude_git_branching_workflow",
-          "claude_feature_branch_protocol",
-          "claude_auto_merge_protocol",
-          "claude_autonomous_workflow_protocol"
+          "design_discovery_page",
+          "design_etalase_page",
+          "design_checkout_page",
+          "design_order_tracking_page"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "design.md"
+      },
+      {
+        "id": "merchant_order_lifecycle",
+        "label": "Merchant Order Lifecycle (Terminal -> Alert -> Stock -> Settings)",
+        "nodes": [
+          "design_terminal_kasir_page",
+          "design_order_alert_modal",
+          "design_stock_toggle_page",
+          "design_settings_page"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "design.md"
+      },
+      {
+        "id": "wise_design_pillars",
+        "label": "Wise Design System Four Core Pillars",
+        "nodes": [
+          "design_lime_universal_action",
+          "design_canonical_pill_geometry",
+          "design_heavy_typography",
+          "design_surface_contrast"
         ],
         "relation": "form",
         "confidence": "EXTRACTED",
         "confidence_score": 1.0,
-        "source_file": "CLAUDE.md"
+        "source_file": "design.md"
       }
     ]
   },
   "nodes": [
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "package",
+      "community": 4,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "package_name",
+      "community": 4,
+      "norm_label": "name"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "package_version",
+      "community": 4,
+      "norm_label": "version"
+    },
+    {
+      "label": "private",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "package_private",
+      "community": 4,
+      "norm_label": "private"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "package_scripts",
+      "community": 4,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "dev",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "package_scripts_dev",
+      "community": 4,
+      "norm_label": "dev"
+    },
+    {
+      "label": "build",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "package_scripts_build",
+      "community": 4,
+      "norm_label": "build"
+    },
+    {
+      "label": "start",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "package_scripts_start",
+      "community": 4,
+      "norm_label": "start"
+    },
+    {
+      "label": "postinstall",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "package_scripts_postinstall",
+      "community": 4,
+      "norm_label": "postinstall"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "package_dependencies",
+      "community": 3,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "@prisma/client",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "package_dependencies_prisma_client",
+      "community": 3,
+      "norm_label": "@prisma/client"
+    },
+    {
+      "label": "@prisma/client",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "prisma_client",
+      "community": 3,
+      "norm_label": "@prisma/client"
+    },
+    {
+      "label": "next",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "package_dependencies_next",
+      "community": 3,
+      "norm_label": "next"
+    },
+    {
+      "label": "next",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "next",
+      "community": 3,
+      "norm_label": "next"
+    },
+    {
+      "label": "react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "package_dependencies_react",
+      "community": 3,
+      "norm_label": "react"
+    },
+    {
+      "label": "react",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "react",
+      "community": 3,
+      "norm_label": "react"
+    },
+    {
+      "label": "react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "package_dependencies_react_dom",
+      "community": 3,
+      "norm_label": "react-dom"
+    },
+    {
+      "label": "react-dom",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "react_dom",
+      "community": 3,
+      "norm_label": "react-dom"
+    },
+    {
+      "label": "swr",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "package_dependencies_swr",
+      "community": 3,
+      "norm_label": "swr"
+    },
+    {
+      "label": "swr",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "swr",
+      "community": 3,
+      "norm_label": "swr"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "package_devdependencies",
+      "community": 1,
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "@types/node",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "package_devdependencies_types_node",
+      "community": 1,
+      "norm_label": "@types/node"
+    },
+    {
+      "label": "@types/node",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "types_node",
+      "community": 1,
+      "norm_label": "@types/node"
+    },
+    {
+      "label": "@types/react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "package_devdependencies_types_react",
+      "community": 1,
+      "norm_label": "@types/react"
+    },
+    {
+      "label": "@types/react",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "types_react",
+      "community": 1,
+      "norm_label": "@types/react"
+    },
+    {
+      "label": "@types/react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "package_devdependencies_types_react_dom",
+      "community": 1,
+      "norm_label": "@types/react-dom"
+    },
+    {
+      "label": "@types/react-dom",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "types_react_dom",
+      "community": 1,
+      "norm_label": "@types/react-dom"
+    },
+    {
+      "label": "autoprefixer",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "package_devdependencies_autoprefixer",
+      "community": 1,
+      "norm_label": "autoprefixer"
+    },
+    {
+      "label": "autoprefixer",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "autoprefixer",
+      "community": 1,
+      "norm_label": "autoprefixer"
+    },
+    {
+      "label": "postcss",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "package_devdependencies_postcss",
+      "community": 1,
+      "norm_label": "postcss"
+    },
+    {
+      "label": "postcss",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "postcss",
+      "community": 1,
+      "norm_label": "postcss"
+    },
+    {
+      "label": "prisma",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "package_devdependencies_prisma",
+      "community": 1,
+      "norm_label": "prisma"
+    },
+    {
+      "label": "prisma",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "prisma",
+      "community": 1,
+      "norm_label": "prisma"
+    },
+    {
+      "label": "tailwindcss",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "package_devdependencies_tailwindcss",
+      "community": 1,
+      "norm_label": "tailwindcss"
+    },
+    {
+      "label": "tailwindcss",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "tailwindcss",
+      "community": 1,
+      "norm_label": "tailwindcss"
+    },
+    {
+      "label": "typescript",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "package_devdependencies_typescript",
+      "community": 1,
+      "norm_label": "typescript"
+    },
+    {
+      "label": "typescript",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "typescript",
+      "community": 1,
+      "norm_label": "typescript"
+    },
     {
       "label": "Dekat Warung App (Project Directive)",
       "file_type": "concept",
@@ -60,7 +472,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_dekat_warung",
-      "community": 1,
+      "community": 0,
       "norm_label": "dekat warung app (project directive)"
     },
     {
@@ -73,7 +485,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_primary_stack",
-      "community": 2,
+      "community": 0,
       "norm_label": "primary tech stack (next.js+tailwind+prisma+postgresql)"
     },
     {
@@ -86,7 +498,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_nextjs",
-      "community": 2,
+      "community": 0,
       "norm_label": "next.js 15.5.20 (app router)"
     },
     {
@@ -99,7 +511,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_tailwind",
-      "community": 2,
+      "community": 0,
       "norm_label": "tailwind css"
     },
     {
@@ -112,7 +524,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_prisma_orm",
-      "community": 2,
+      "community": 0,
       "norm_label": "prisma orm"
     },
     {
@@ -125,7 +537,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_postgresql",
-      "community": 2,
+      "community": 0,
       "norm_label": "postgresql"
     },
     {
@@ -138,7 +550,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_wise_design_system",
-      "community": 1,
+      "community": 0,
       "norm_label": "wise design system (sage canvas + wise lime)"
     },
     {
@@ -151,7 +563,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_git_branching_workflow",
-      "community": 3,
+      "community": 7,
       "norm_label": "git & branching workflow (strict rules)"
     },
     {
@@ -164,7 +576,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_feature_branch_protocol",
-      "community": 3,
+      "community": 7,
       "norm_label": "feature branch development lifecycle"
     },
     {
@@ -177,7 +589,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_auto_merge_protocol",
-      "community": 3,
+      "community": 7,
       "norm_label": "auto-merge & branch retention protocol"
     },
     {
@@ -190,7 +602,7 @@
       "author": null,
       "contributor": null,
       "id": "claude_autonomous_workflow_protocol",
-      "community": 3,
+      "community": 7,
       "norm_label": "autonomous workflow protocol"
     },
     {
@@ -203,7 +615,7 @@
       "author": null,
       "contributor": null,
       "id": "prd_dekat_warung",
-      "community": 1,
+      "community": 0,
       "norm_label": "dekat warung (prd business concept)"
     },
     {
@@ -216,7 +628,7 @@
       "author": null,
       "contributor": null,
       "id": "prd_hyper_local_quick_commerce",
-      "community": 1,
+      "community": 0,
       "norm_label": "hyper-local quick commerce (radius-based)"
     },
     {
@@ -242,7 +654,7 @@
       "author": null,
       "contributor": null,
       "id": "prd_merchant_terminal",
-      "community": 1,
+      "community": 0,
       "norm_label": "pwa warung (merchant terminal)"
     },
     {
@@ -307,7 +719,7 @@
       "author": null,
       "contributor": null,
       "id": "prd_quick_stock_switcher",
-      "community": 1,
+      "community": 0,
       "norm_label": "quick stock switcher (ada/habis toggle)"
     },
     {
@@ -320,7 +732,7 @@
       "author": null,
       "contributor": null,
       "id": "prd_alert_modal_sound",
-      "community": 1,
+      "community": 0,
       "norm_label": "full-screen alert modal + sound alarm (new_order)"
     },
     {
@@ -346,7 +758,7 @@
       "author": null,
       "contributor": null,
       "id": "prd_postgresql_db",
-      "community": 2,
+      "community": 0,
       "norm_label": "database (postgresql) - architecture participant"
     },
     {
@@ -374,9 +786,782 @@
       "id": "prd_delivery_options",
       "community": 0,
       "norm_label": "delivery options (pickup / anterin +rp 2.000)"
+    },
+    {
+      "label": "Dekat Warung Project (README)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_dekat_warung",
+      "community": 6,
+      "norm_label": "dekat warung project (readme)"
+    },
+    {
+      "label": "Dekat Warung Master Design System",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a71",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_dekat_warung_system",
+      "community": 6,
+      "norm_label": "dekat warung master design system"
+    },
+    {
+      "label": "Wise Design System (Foundation)",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a71",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_wise_design_system",
+      "community": 5,
+      "norm_label": "wise design system (foundation)"
+    },
+    {
+      "label": "Sage Canvas Background #e8ebe6",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a72.1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_sage_canvas",
+      "community": 5,
+      "norm_label": "sage canvas background #e8ebe6"
+    },
+    {
+      "label": "Wise Lime Green CTA #9fe870",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a72.1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_wise_lime",
+      "community": 5,
+      "norm_label": "wise lime green cta #9fe870"
+    },
+    {
+      "label": "Ink Near-Black #0e0f0c",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a72.1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_ink_color",
+      "community": 5,
+      "norm_label": "ink near-black #0e0f0c"
+    },
+    {
+      "label": "Canonical 24px Pill Geometry Principle",
+      "file_type": "rationale",
+      "source_file": "design.md",
+      "source_location": "\u00a71 / \u00a76",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_canonical_pill_geometry",
+      "community": 5,
+      "norm_label": "canonical 24px pill geometry principle"
+    },
+    {
+      "label": "Heavy Display Typography Weight 900 Principle",
+      "file_type": "rationale",
+      "source_file": "design.md",
+      "source_location": "\u00a71 / \u00a76",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_heavy_typography",
+      "community": 5,
+      "norm_label": "heavy display typography weight 900 principle"
+    },
+    {
+      "label": "Lime Green as Universal Primary CTA Principle",
+      "file_type": "rationale",
+      "source_file": "design.md",
+      "source_location": "\u00a71 / \u00a76",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_lime_universal_action",
+      "community": 5,
+      "norm_label": "lime green as universal primary cta principle"
+    },
+    {
+      "label": "Sage-vs-White Surface Contrast Elevation Principle",
+      "file_type": "rationale",
+      "source_file": "design.md",
+      "source_location": "\u00a71 / \u00a76",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_surface_contrast",
+      "community": 5,
+      "norm_label": "sage-vs-white surface contrast elevation principle"
+    },
+    {
+      "label": "PWA Pembeli (Customer App)",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a73",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_pwa_pembeli",
+      "community": 2,
+      "norm_label": "pwa pembeli (customer app)"
+    },
+    {
+      "label": "PWA Warung (Merchant Terminal)",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a74",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_pwa_warung",
+      "community": 6,
+      "norm_label": "pwa warung (merchant terminal)"
+    },
+    {
+      "label": "Halaman 1.1 Discovery & Warung Terdekat (/)",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_discovery_page",
+      "community": 2,
+      "norm_label": "halaman 1.1 discovery & warung terdekat (/)"
+    },
+    {
+      "label": "Halaman 1.2 Etalase Warung & Pilih Produk (/warung/[id])",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.2",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_etalase_page",
+      "community": 2,
+      "norm_label": "halaman 1.2 etalase warung & pilih produk (/warung/[id])"
+    },
+    {
+      "label": "Halaman 1.3 Checkout & Konfirmasi (/checkout)",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_checkout_page",
+      "community": 2,
+      "norm_label": "halaman 1.3 checkout & konfirmasi (/checkout)"
+    },
+    {
+      "label": "Halaman 1.4 Realtime Order Tracking (/order/[id])",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.4",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_order_tracking_page",
+      "community": 2,
+      "norm_label": "halaman 1.4 realtime order tracking (/order/[id])"
+    },
+    {
+      "label": "Halaman 2.1 Terminal Kasir Utama (/warung-admin)",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_terminal_kasir_page",
+      "community": 6,
+      "norm_label": "halaman 2.1 terminal kasir utama (/warung-admin)"
+    },
+    {
+      "label": "Halaman 2.2 Modal Alert Pesanan Masuk",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.2",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_order_alert_modal",
+      "community": 6,
+      "norm_label": "halaman 2.2 modal alert pesanan masuk"
+    },
+    {
+      "label": "Halaman 2.3 Kelola Stok Quick-Toggle (/warung-admin/stok)",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_stock_toggle_page",
+      "community": 6,
+      "norm_label": "halaman 2.3 kelola stok quick-toggle (/warung-admin/stok)"
+    },
+    {
+      "label": "Halaman 2.4 Pengaturan Warung (/warung-admin/pengaturan)",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.4",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_settings_page",
+      "community": 6,
+      "norm_label": "halaman 2.4 pengaturan warung (/warung-admin/pengaturan)"
+    },
+    {
+      "label": "Shared Component 5.1 Merchant Bottom Bar",
+      "file_type": "document",
+      "source_file": "design.md",
+      "source_location": "\u00a75 Component 5.1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_merchant_bottom_bar",
+      "community": 6,
+      "norm_label": "shared component 5.1 merchant bottom bar"
+    },
+    {
+      "label": "Order State PENDING (Warning Yellow)",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.4",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_order_state_pending",
+      "community": 2,
+      "norm_label": "order state pending (warning yellow)"
+    },
+    {
+      "label": "Order State DIPROSES (Processing)",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.4",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_order_state_diproses",
+      "community": 2,
+      "norm_label": "order state diproses (processing)"
+    },
+    {
+      "label": "Order State SELESAI (Completed)",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.4",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_order_state_selesai",
+      "community": 2,
+      "norm_label": "order state selesai (completed)"
+    },
+    {
+      "label": "QRIS Payment Method",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.2 / \u00a74 Halaman 2.1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_payment_qris",
+      "community": 2,
+      "norm_label": "qris payment method"
+    },
+    {
+      "label": "CASH Payment Method",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.2 / \u00a74 Halaman 2.1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_payment_cash",
+      "community": 2,
+      "norm_label": "cash payment method"
+    },
+    {
+      "label": "Ambil Sendiri (Pickup) Delivery Option",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_delivery_pickup",
+      "community": 2,
+      "norm_label": "ambil sendiri (pickup) delivery option"
+    },
+    {
+      "label": "Anterin (Delivery) Option",
+      "file_type": "concept",
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "design_delivery_antarin",
+      "community": 2,
+      "norm_label": "anterin (delivery) option"
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package",
+      "target": "package_dependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package",
+      "target": "package_devdependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package",
+      "target": "package_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package",
+      "target": "package_private",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package",
+      "target": "package_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package",
+      "target": "package_version",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_scripts",
+      "target": "package_scripts_build",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_scripts",
+      "target": "package_scripts_dev",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_scripts",
+      "target": "package_scripts_postinstall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_scripts",
+      "target": "package_scripts_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_dependencies",
+      "target": "package_dependencies_next",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_dependencies",
+      "target": "package_dependencies_prisma_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_dependencies",
+      "target": "package_dependencies_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_dependencies",
+      "target": "package_dependencies_swr",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_dependencies_prisma_client",
+      "target": "prisma_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_dependencies_next",
+      "target": "next",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_dependencies_react",
+      "target": "react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_dependencies_react_dom",
+      "target": "react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_dependencies_swr",
+      "target": "swr",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_autoprefixer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_postcss",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_prisma",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_tailwindcss",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_types_node",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_types_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_types_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_typescript",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_devdependencies_types_node",
+      "target": "types_node",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_devdependencies_types_react",
+      "target": "types_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_devdependencies_types_react_dom",
+      "target": "types_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_devdependencies_autoprefixer",
+      "target": "autoprefixer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_devdependencies_postcss",
+      "target": "postcss",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_devdependencies_prisma",
+      "target": "prisma",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_devdependencies_tailwindcss",
+      "target": "tailwindcss",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_devdependencies_typescript",
+      "target": "typescript",
+      "confidence_score": 1.0
+    },
     {
       "relation": "references",
       "confidence": "EXTRACTED",
@@ -656,6 +1841,376 @@
       "weight": 1.0,
       "source": "prd_realtime_engine",
       "target": "prd_postgresql_db"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_dekat_warung",
+      "target": "design_dekat_warung_system"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a75",
+      "weight": 1.0,
+      "source": "design_dekat_warung_system",
+      "target": "design_merchant_bottom_bar"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73",
+      "weight": 1.0,
+      "source": "design_dekat_warung_system",
+      "target": "design_pwa_pembeli"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a74",
+      "weight": 1.0,
+      "source": "design_dekat_warung_system",
+      "target": "design_pwa_warung"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a71",
+      "weight": 1.0,
+      "source": "design_dekat_warung_system",
+      "target": "design_wise_design_system"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a71 / \u00a76",
+      "weight": 1.0,
+      "source": "design_canonical_pill_geometry",
+      "target": "design_wise_design_system"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a71 / \u00a76",
+      "weight": 1.0,
+      "source": "design_heavy_typography",
+      "target": "design_wise_design_system"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a72.1",
+      "weight": 1.0,
+      "source": "design_wise_design_system",
+      "target": "design_ink_color"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a72.1",
+      "weight": 1.0,
+      "source": "design_wise_design_system",
+      "target": "design_sage_canvas"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a72.1",
+      "weight": 1.0,
+      "source": "design_wise_design_system",
+      "target": "design_wise_lime"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a71 / \u00a76",
+      "weight": 1.0,
+      "source": "design_surface_contrast",
+      "target": "design_sage_canvas"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a71 / \u00a76",
+      "weight": 1.0,
+      "source": "design_lime_universal_action",
+      "target": "design_wise_lime"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.3",
+      "weight": 1.0,
+      "source": "design_pwa_pembeli",
+      "target": "design_checkout_page"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.1",
+      "weight": 1.0,
+      "source": "design_pwa_pembeli",
+      "target": "design_discovery_page"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.2",
+      "weight": 1.0,
+      "source": "design_pwa_pembeli",
+      "target": "design_etalase_page"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.4",
+      "weight": 1.0,
+      "source": "design_pwa_pembeli",
+      "target": "design_order_tracking_page"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "design.md",
+      "source_location": "\u00a73 / \u00a74",
+      "weight": 1.0,
+      "source": "design_pwa_pembeli",
+      "target": "design_pwa_warung"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "design.md",
+      "source_location": "\u00a75",
+      "weight": 1.0,
+      "source": "design_merchant_bottom_bar",
+      "target": "design_pwa_warung"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.2",
+      "weight": 1.0,
+      "source": "design_pwa_warung",
+      "target": "design_order_alert_modal"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.4",
+      "weight": 1.0,
+      "source": "design_pwa_warung",
+      "target": "design_settings_page"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.3",
+      "weight": 1.0,
+      "source": "design_pwa_warung",
+      "target": "design_stock_toggle_page"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.1",
+      "weight": 1.0,
+      "source": "design_pwa_warung",
+      "target": "design_terminal_kasir_page"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.1 -> 1.2",
+      "weight": 1.0,
+      "source": "design_discovery_page",
+      "target": "design_etalase_page"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.2 -> 1.3",
+      "weight": 1.0,
+      "source": "design_etalase_page",
+      "target": "design_checkout_page"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.2",
+      "weight": 1.0,
+      "source": "design_etalase_page",
+      "target": "design_payment_cash"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.2",
+      "weight": 1.0,
+      "source": "design_etalase_page",
+      "target": "design_payment_qris"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.3",
+      "weight": 1.0,
+      "source": "design_checkout_page",
+      "target": "design_delivery_antarin"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.3",
+      "weight": 1.0,
+      "source": "design_checkout_page",
+      "target": "design_delivery_pickup"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.3 -> 1.4",
+      "weight": 1.0,
+      "source": "design_checkout_page",
+      "target": "design_order_tracking_page"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.4",
+      "weight": 1.0,
+      "source": "design_order_tracking_page",
+      "target": "design_order_state_diproses"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.4",
+      "weight": 1.0,
+      "source": "design_order_tracking_page",
+      "target": "design_order_state_pending"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.4",
+      "weight": 1.0,
+      "source": "design_order_tracking_page",
+      "target": "design_order_state_selesai"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.1 PICKUP tag",
+      "weight": 1.0,
+      "source": "design_terminal_kasir_page",
+      "target": "design_delivery_pickup"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.1 -> 2.2",
+      "weight": 1.0,
+      "source": "design_terminal_kasir_page",
+      "target": "design_order_alert_modal"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "design.md",
+      "source_location": "\u00a74 Halaman 2.1",
+      "weight": 1.0,
+      "source": "design_terminal_kasir_page",
+      "target": "design_payment_cash"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.2 / \u00a74 Halaman 2.1",
+      "weight": 1.0,
+      "source": "design_payment_cash",
+      "target": "design_payment_qris"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "design.md",
+      "source_location": "\u00a73 Halaman 1.3",
+      "weight": 1.0,
+      "source": "design_delivery_pickup",
+      "target": "design_delivery_antarin"
     }
   ],
   "hyperedges": [
@@ -668,6 +2223,20 @@
         "claude_tailwind",
         "claude_prisma_orm",
         "claude_postgresql"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md"
+    },
+    {
+      "id": "claude_git_lifecycle_protocols",
+      "label": "Git Development Lifecycle Protocols",
+      "nodes": [
+        "claude_git_branching_workflow",
+        "claude_feature_branch_protocol",
+        "claude_auto_merge_protocol",
+        "claude_autonomous_workflow_protocol"
       ],
       "relation": "form",
       "confidence": "EXTRACTED",
@@ -690,18 +2259,47 @@
       "source_file": "prd.md"
     },
     {
-      "id": "claude_git_lifecycle_protocols",
-      "label": "Git Development Lifecycle Protocols",
+      "id": "buyer_purchase_flow",
+      "label": "Buyer Purchase Flow (Discovery -> Etalase -> Checkout -> Tracking)",
       "nodes": [
-        "claude_git_branching_workflow",
-        "claude_feature_branch_protocol",
-        "claude_auto_merge_protocol",
-        "claude_autonomous_workflow_protocol"
+        "design_discovery_page",
+        "design_etalase_page",
+        "design_checkout_page",
+        "design_order_tracking_page"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "design.md"
+    },
+    {
+      "id": "merchant_order_lifecycle",
+      "label": "Merchant Order Lifecycle (Terminal -> Alert -> Stock -> Settings)",
+      "nodes": [
+        "design_terminal_kasir_page",
+        "design_order_alert_modal",
+        "design_stock_toggle_page",
+        "design_settings_page"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "design.md"
+    },
+    {
+      "id": "wise_design_pillars",
+      "label": "Wise Design System Four Core Pillars",
+      "nodes": [
+        "design_lime_universal_action",
+        "design_canonical_pill_geometry",
+        "design_heavy_typography",
+        "design_surface_contrast"
       ],
       "relation": "form",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "CLAUDE.md"
+      "source_file": "design.md"
     }
-  ]
+  ],
+  "built_at_commit": "2305d8be4b8b66cefc50dce2dcd4788c651d14f6"
 }

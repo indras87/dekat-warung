@@ -8,5 +8,20 @@
     "mtime": 1785070356.5229826,
     "ast_hash": "3a927b8149ea3aa93a2a771dc079c6dc",
     "semantic_hash": "3a927b8149ea3aa93a2a771dc079c6dc"
+  },
+  "package.json": {
+    "mtime": 1785072152.232249,
+    "ast_hash": "14401e4d89e32353ad85d0846cc2acf4",
+    "semantic_hash": "14401e4d89e32353ad85d0846cc2acf4"
+  },
+  "README.md": {
+    "mtime": 1785072204.2081513,
+    "ast_hash": "ed1ff54c640ab804045dca67f431416d",
+    "semantic_hash": "ed1ff54c640ab804045dca67f431416d"
+  },
+  "design.md": {
+    "mtime": 1785071813.5305803,
+    "ast_hash": "4972dc719ea9010132a6e93f208f6757",
+    "semantic_hash": "4972dc719ea9010132a6e93f208f6757"
   }
 }
