@@ -3,6 +3,10 @@ import { getDefaultMerchantWarung } from "@/lib/actions/warung";
 import { getOrdersForWarung } from "@/lib/actions/order";
 import { MerchantTerminalClient } from "@/components/MerchantTerminalClient";
 
+// Always render at request time — these pages query the DB and must not be
+// prerendered at build time (Docker build has no live Postgres).
+export const dynamic = "force-dynamic";
+
 export default async function TerminalPage() {
   const warung = await getDefaultMerchantWarung();
   if (!warung) {

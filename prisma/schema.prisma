@@ -1,14 +1,14 @@
 // Dekat Warung — Prisma schema
-// Stack per CLAUDE.md: PostgreSQL. Provider defaults to SQLite so the MVP runs
-// zero-config (`npm run db:setup`). Flip `provider` to "postgresql" + a real
-// DATABASE_URL for production — models are provider-agnostic.
+// Stack per CLAUDE.md: PostgreSQL. Provider is postgresql for the containerized
+// production setup (see docker-compose.yml). Models are provider-agnostic — to
+// run on SQLite locally, switch `provider` to "sqlite" and use a file: URL.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
