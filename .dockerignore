@@ -24,8 +24,6 @@ graphify-out
 # Docker meta
 Dockerfile
 .dockerignore
-docker-compose.yml
-docker-entrypoint.sh
 
 # Misc
 npm-debug.log*

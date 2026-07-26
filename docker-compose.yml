@@ -6,8 +6,11 @@ services:
       POSTGRES_USER: dekat
       POSTGRES_PASSWORD: dekat
       POSTGRES_DB: dekat_warung
-    ports:
-      - "5432:5432"
+    # No host port published: the app reaches `db` over the compose network.
+    # Host port 5432 is intentionally left free (a host Postgres may already use it).
+    # To inspect from host: `docker compose exec db psql -U dekat -d dekat_warung`
+    expose:
+      - "5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
