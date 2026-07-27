@@ -31,13 +31,13 @@ async function main() {
 
   // --- Users ---
   const ownerBuAni = await prisma.user.create({
-    data: { nama: "Bu Ani", email: "ani@warung.test", noHp: "628123450001", role: "WARUNG" },
+    data: { nama: "Bu Ani", email: "ani@warung.test", noHp: "628123450001", role: "WARUNG", pin: "123456" },
   });
   const ownerPakBudi = await prisma.user.create({
-    data: { nama: "Pak Budi", email: "budi@warung.test", noHp: "628123450002", role: "WARUNG" },
+    data: { nama: "Pak Budi", email: "budi@warung.test", noHp: "628123450002", role: "WARUNG", pin: "234567" },
   });
   const buyer = await prisma.user.create({
-    data: { nama: "Pembeli Demo", email: "pembeli@warung.test", noHp: "628123450003", role: "PEMBELI" },
+    data: { nama: "Pembeli Demo", email: "pembeli@warung.test", noHp: "628123450003", role: "PEMBELI", pin: "111111" },
   });
 
   // --- Warungs (within 200m of buyer -6.9659, 107.6255) ---

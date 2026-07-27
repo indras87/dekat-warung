@@ -47,6 +47,7 @@ model User {
   email     String?  @unique
   noHp      String?
   role      Role     @default(PEMBELI)
+  pin       String?  // PIN numerik 6 digit, opsional untuk login
   warung    Warung?
   orders    Order[]
   createdAt DateTime @default(now())
