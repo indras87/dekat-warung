@@ -9,6 +9,7 @@ import {
   deleteCategory as deleteCategoryAction,
 } from "@/lib/actions/product";
 import type { ProductDTO, CategoryDTO } from "@/lib/actions/product";
+import { ImageUpload } from "./ImageUpload";
 
 interface ProdukClientProps {
   warungId: string;
@@ -197,16 +198,11 @@ export function ProdukClient({
         </div>
 
         <div>
-          <label htmlFor="imageUrl-produk" className="text-sm font-bold text-ink block mb-1">
-            URL Gambar (opsional)
-          </label>
-          <input
-            id="imageUrl-produk"
-            type="url"
-            value={newImageUrl}
-            onChange={(e) => setNewImageUrl(e.target.value)}
+          <ImageUpload
+            value={newImageUrl || null}
+            onChange={(url) => setNewImageUrl(url ?? "")}
+            label="Gambar Produk (opsional)"
             placeholder="https://example.com/gambar.jpg"
-            className="w-full bg-canvas-soft border border-ink rounded-xl p-3 text-base text-ink font-medium"
             disabled={isPending}
           />
         </div>
@@ -394,18 +390,13 @@ export function ProdukClient({
             </div>
 
             <div>
-              <label htmlFor="edit-imageUrl" className="text-sm font-bold text-ink block mb-1">
-                URL Gambar
-              </label>
-              <input
-                id="edit-imageUrl"
-                type="url"
-                value={editingProduct.imageUrl || ""}
-                onChange={(e) =>
-                  setEditingProduct({ ...editingProduct, imageUrl: e.target.value || null })
+              <ImageUpload
+                value={editingProduct.imageUrl || null}
+                onChange={(url) =>
+                  setEditingProduct({ ...editingProduct, imageUrl: url ?? null })
                 }
+                label="Gambar Produk"
                 placeholder="https://example.com/gambar.jpg"
-                className="w-full bg-canvas-soft border border-ink rounded-xl p-3 text-base text-ink font-medium"
                 disabled={isPending}
               />
             </div>

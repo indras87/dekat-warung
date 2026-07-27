@@ -36,3 +36,7 @@ next-env.d.ts
 
 # graphify generated cache
 /graphify-out/cache/
+
+# uploaded images (keep directory structure, ignore files)
+/public/uploads/*
+!/public/uploads/.gitkeep
