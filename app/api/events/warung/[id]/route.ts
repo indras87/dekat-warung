@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 import { getOrdersForWarung, getNewestPendingOrder } from "@/lib/actions/order";
-import { POLL_INTERVAL_MS } from "@/lib/constants";
+import { POLL_INTERVAL_MS, RATE_LIMIT } from "@/lib/constants";
 import { makeSSEStream } from "@/lib/sse";
+import { withRateLimit } from "@/lib/ratelimit";
 
 // SSE butuh runtime Node.js (Prisma + ReadableStream)
 export const runtime = "nodejs";
@@ -15,26 +16,26 @@ export const runtime = "nodejs";
  *
  * Klien (MerchantTerminalClient) langganan endpoint ini untuk update realtime.
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  const { id: warungId } = await params;
+export const GET = withRateLimit(
+  RATE_LIMIT.SSE_STREAM,
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+    const { id: warungId } = await params;
 
-  const stream = makeSSEStream({
-    fetcher: async () => {
-      // Ambil pesanan aktif + pesanan PENDING terbaru
-      const activeOrders = await getOrdersForWarung(warungId, true);
-      const newestPending = await getNewestPendingOrder(warungId);
+    const stream = makeSSEStream({
+      fetcher: async () => {
+        // Ambil pesanan aktif + pesanan PENDING terbaru
+        const activeOrders = await getOrdersForWarung(warungId, true);
+        const newestPending = await getNewestPendingOrder(warungId);
 
-      return {
-        orders: activeOrders,
-        newPending: newestPending ? newestPending.id : null,
-      };
-    },
-    tickMs: POLL_INTERVAL_MS,
-    signal: req.signal,
-  });
+        return {
+          orders: activeOrders,
+          newPending: newestPending ? newestPending.id : null,
+        };
+      },
+      tickMs: POLL_INTERVAL_MS,
+      signal: req.signal,
+    });
 
-  return stream;
-}
+    return stream;
+  },
+);
