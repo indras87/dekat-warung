@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart";
 import { getWarungById, type WarungDTO } from "@/lib/actions/warung";
 import { createOrder } from "@/lib/actions/order";
+import { getCurrentBuyerId } from "@/lib/actions/auth";
 import { formatRupiah } from "@/lib/format";
 import {
   SERVICE_EMOJI,
@@ -55,9 +56,13 @@ export default function CheckoutPage() {
     setSubmitting(true);
     setError(null);
     try {
+      // Ambil buyerId dari session jika pembeli login
+      const buyerId = await getCurrentBuyerId();
+
       const order = await createOrder({
         warungId,
         buyerName: buyerName.trim(),
+        sessionBuyerId: buyerId, // buyerId dari session
         serviceType: service,
         paymentMethod: payment,
         customNote: hasCustom ? customNote.trim() : null,
