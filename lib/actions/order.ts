@@ -29,6 +29,8 @@ export type CreateOrderInput = {
   customNote?: string | null;
   items: { productId?: string | null; productName: string; price: number; quantity: number }[];
   deliveryFee?: number;
+  /** Opsional: buyerId dari session jika pembeli login. */
+  sessionBuyerId?: string | null;
 };
 
 /** Generate next human-readable order number: ORD-105, ORD-106, … */
@@ -44,12 +46,16 @@ export async function createOrder(input: CreateOrderInput): Promise<OrderDTO> {
     input.serviceType === "ANTERIN" ? (input.deliveryFee ?? 2000) : 0;
   const totalAmount = subtotal + deliveryFee;
 
+  // Gunakan sessionBuyerId jika pembeli login, fallback ke buyerId dari input
+  // (backward compatibility: pembeli tanpa login tetap bisa pakai buyerName saja)
+  const finalBuyerId = input.sessionBuyerId || input.buyerId || null;
+
   const order = await prisma.order.create({
     data: {
       orderNumber: await nextOrderNumber(),
       warungId: input.warungId,
       buyerName: input.buyerName,
-      buyerId: input.buyerId ?? null,
+      buyerId: finalBuyerId,
       serviceType: input.serviceType,
       paymentMethod: input.paymentMethod,
       customNote: input.customNote ?? null,
