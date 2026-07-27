@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { StatusBadge } from "@/components/StatusBadge";
+import { PushOptIn } from "@/components/PushOptIn";
 import { formatRupiah, timeAgo } from "@/lib/format";
 import type { OrderDTO } from "@/lib/actions/order";
 
@@ -41,14 +42,17 @@ export function RiwayatClient({ initialOrders }: RiwayatClientProps) {
 
   return (
     <main className="bg-canvas-soft min-h-screen p-4 space-y-4">
-      <header className="bg-canvas-pure p-4 rounded-pill shadow-sm flex justify-between items-center">
-        <h1 className="text-2xl font-black text-ink">Pesanan Saya</h1>
-        <Link
-          href="/"
-          className="text-xs font-bold text-ink bg-lime px-4 py-2 rounded-full hover:bg-lime-hover transition-colors"
-        >
-          ← Kembali
-        </Link>
+      <header className="bg-canvas-pure p-4 rounded-pill shadow-sm flex justify-between items-center gap-2">
+        <h1 className="text-xl font-black text-ink">Pesanan Saya</h1>
+        <div className="flex items-center gap-2">
+          <PushOptIn />
+          <Link
+            href="/"
+            className="text-xs font-bold text-ink bg-lime px-3 py-2 rounded-full hover:bg-lime-hover transition-colors"
+          >
+            ← Kembali
+          </Link>
+        </div>
       </header>
 
       <div className="space-y-4">

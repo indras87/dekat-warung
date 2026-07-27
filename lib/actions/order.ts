@@ -7,6 +7,7 @@ import {
   assertRange,
   assertEnum,
 } from "@/lib/security";
+import { sendPush } from "@/lib/push";
 import type { Order, OrderItem, OrderStatus, PaymentMethod, ServiceType, Warung } from "@prisma/client";
 
 export type OrderItemDTO = OrderItem;
@@ -178,6 +179,44 @@ export async function updateOrderStatus(
     },
     include: { items: true, warung: true },
   });
+
+  // Kirim push notification ke pembeli secara fire-and-forget
+  if (o.buyerId) {
+    // Tentukan pesan berdasarkan status
+    let title = "Status Pesanan Diperbarui";
+    let body = "";
+    let url = `/pesanan-saya`;
+
+    switch (status) {
+      case "DIPROSES":
+        title = "📦 Pesanan Diproses";
+        body = `Pesanan ${o.orderNumber} sedang disiapkan oleh ${o.warung?.namaWarung || "warung"}.`;
+        break;
+      case "SIAP":
+        title = "✅ Pesanan Siap";
+        body = `Pesanan ${o.orderNumber} sudah siap diambil!`;
+        url = `/pesanan-saya`;
+        break;
+      case "SELESAI":
+        title = "🎉 Pesanan Selesai";
+        body = `Pesanan ${o.orderNumber} telah selesai. Terima kasih!`;
+        url = `/pesanan-saya`;
+        break;
+      case "BATAL":
+        title = "❌ Pesanan Dibatalkan";
+        body = `Pesanan ${o.orderNumber} telah dibatalkan.`;
+        url = `/pesanan-saya`;
+        break;
+      default:
+        body = `Status pesanan ${o.orderNumber} kini: ${status}.`;
+    }
+
+    // Kirim push asynchronously, jangan blok response
+    sendPush(o.buyerId, { title, body, url }).catch((err) =>
+      console.error("[updateOrderStatus] Gagal kirim push:", err)
+    );
+  }
+
   return toOrderDTO(o);
 }
 
