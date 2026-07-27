@@ -2,6 +2,11 @@
 
 import { prisma } from "@/lib/prisma";
 import { ORDER_PENDING_TTL_MS } from "@/lib/constants";
+import {
+  assertMaxLength,
+  assertRange,
+  assertEnum,
+} from "@/lib/security";
 import type { Order, OrderItem, OrderStatus, PaymentMethod, ServiceType, Warung } from "@prisma/client";
 
 export type OrderItemDTO = OrderItem;
@@ -55,10 +60,51 @@ async function nextOrderNumber(): Promise<string> {
 }
 
 export async function createOrder(input: CreateOrderInput): Promise<OrderDTO> {
+  // --- Validasi input ketat (security) ---
+
+  // Total item harus ≥ 1
+  if (!input.items || input.items.length < 1) {
+    throw new Error("Pesanan harus memiliki minimal 1 item");
+  }
+
+  // Validasi setiap item
+  for (const item of input.items) {
+    if (item.quantity <= 0 || item.quantity > 99) {
+      throw new Error("Jumlah item harus antara 1 dan 99");
+    }
+    if (item.price < 0) {
+      throw new Error("Harga item tidak boleh negatif");
+    }
+  }
+
+  // Validasi panjang string
+  assertMaxLength(input.buyerName, 80, "Nama pembeli");
+  if (input.customNote) {
+    assertMaxLength(input.customNote, 500, "Catatan");
+  }
+
+  // Validasi enum
+  assertEnum(
+    input.serviceType,
+    ["PICKUP", "ANTERIN"] as const,
+    "Tipe layanan",
+  );
+  assertEnum(
+    input.paymentMethod,
+    ["CASH", "QRIS", "TRANSFER"] as const,
+    "Metode pembayaran",
+  );
+
+  // Hitung total
   const subtotal = input.items.reduce((s, it) => s + it.price * it.quantity, 0);
   const deliveryFee =
     input.serviceType === "ANTERIN" ? (input.deliveryFee ?? 2000) : 0;
   const totalAmount = subtotal + deliveryFee;
+
+  // Total harus > 0
+  if (totalAmount <= 0) {
+    throw new Error("Total pesanan harus lebih dari 0");
+  }
 
   // Gunakan sessionBuyerId jika pembeli login, fallback ke buyerId dari input
   // (backward compatibility: pembeli tanpa login tetap bisa pakai buyerName saja)

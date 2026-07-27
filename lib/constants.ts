@@ -58,3 +58,28 @@ export const ORDER_PENDING_TTL_MS = 5 * 60 * 1000;
 
 /** Interval cleanup worker untuk cek & batalkan order stale (1 menit). */
 export const CLEANUP_INTERVAL_MS = 60 * 1000;
+
+// --- Rate Limiting Quota (token bucket) ---
+
+/**
+ * Kuota rate limiting per endpoint (capacity = burst, refillPerSec = isi ulang).
+ * Key rate limit = `${ip}:${pathname}`.
+ *
+ * Catatan: Untuk multi-instance, gunakan Redis-based implementation.
+ */
+export const RATE_LIMIT = {
+  /** Order create (POST /api/orders) - 5 burst, refill 1 per 2 dtk. */
+  ORDER_CREATE: { capacity: 5, refillPerSec: 0.5 },
+
+  /** SSE stream - 3 burst, refill 1 per 5 dtk (koneksi long-lived). */
+  SSE_STREAM: { capacity: 3, refillPerSec: 0.2 },
+
+  /** Upload gambar (POST /api/upload) - 10 burst, refill 1 per 2 dtk. */
+  UPLOAD: { capacity: 10, refillPerSec: 0.5 },
+
+  /** Polling endpoint & read-heavy - 20 burst, refill 1 per dtk. */
+  POLLING: { capacity: 20, refillPerSec: 1 },
+
+  /** Cleanup cron (internal) - tidak di-rate-limit, pakai secret sendiri. */
+  CRON: { capacity: 9999, refillPerSec: 9999 },
+} as const;
