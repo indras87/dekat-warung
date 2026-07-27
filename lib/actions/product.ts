@@ -1,7 +1,9 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import type { Product, Category } from "@prisma/client";
+import type { Product, Category, Warung } from "@prisma/client";
+import { getNearbyWarungs, type WarungDTO } from "@/lib/actions/warung";
+import { DISCOVERY_RADIUS_M } from "@/lib/constants";
 
 export type ProductDTO = Omit<Product, "createdAt"> & { createdAt: string };
 export type CategoryDTO = Omit<Category, "products">;
@@ -99,4 +101,98 @@ export async function deleteCategory(id: string): Promise<void> {
   await prisma.category.delete({
     where: { id },
   });
+}
+
+/** DTO untuk hasil pencarian produk lintas warung */
+export type ProductWithWarungDTO = ProductDTO & {
+  warung: {
+    id: string;
+    namaWarung: string;
+    isOpen: boolean;
+    latitude: number;
+    longitude: number;
+  };
+  distanceM: number;
+};
+
+/**
+ * Pencarian produk lintas warung dalam radius.
+ * Mencari produk yang namanya mengandung query (case-insensitive)
+ * dari warung-warnug dalam radius pengguna.
+ *
+ * @param query - Kata kunci pencarian (max 60 karakter)
+ * @param lat - Latitude pengguna
+ * @param lng - Longitude pengguna
+ * @param radiusM - Radius pencarian dalam meter (default DISCOVERY_RADIUS_M)
+ * @returns Array produk dikelompokkan per warung, diurutkan kecocokan & jarak
+ */
+export async function searchProducts(
+  query: string,
+  lat: number,
+  lng: number,
+  radiusM: number = DISCOVERY_RADIUS_M,
+): Promise<ProductWithWarungDTO[]> {
+  // Batasi panjang query untuk cegah abuse
+  const sanitizedQuery = query.trim().slice(0, 60);
+
+  if (!sanitizedQuery) {
+    return [];
+  }
+
+  // 1. Ambil warung dalam radius (reuse getNearbyWarungs)
+  const nearbyWarungs = await getNearbyWarungs(lat, lng, radiusM);
+
+  if (nearbyWarungs.length === 0) {
+    return [];
+  }
+
+  // 2. Ambil ID warung untuk query produk
+  const warungIds = nearbyWarungs.map((w) => w.id);
+
+  // 3. Query produk dengan nama contains query (case-insensitive untuk PostgreSQL)
+  const products = await prisma.product.findMany({
+    where: {
+      warungId: { in: warungIds },
+      nama: { contains: sanitizedQuery, mode: "insensitive" },
+    },
+    include: {
+      warung: {
+        select: {
+          id: true,
+          namaWarung: true,
+          isOpen: true,
+          latitude: true,
+          longitude: true,
+        },
+      },
+    },
+  });
+
+  // 4. Map distanceM dari warung ke setiap produk
+  const warungDistanceMap = new Map<string, number>();
+  nearbyWarungs.forEach((w) => {
+    warungDistanceMap.set(w.id, w.distanceM ?? 0);
+  });
+
+  const results: ProductWithWarungDTO[] = products.map((p) => ({
+    ...p,
+    createdAt: p.createdAt.toISOString(),
+    warung: p.warung,
+    distanceM: warungDistanceMap.get(p.warungId) ?? 0,
+  }));
+
+  // 5. Urutkan: prefix match dulu, lalu jarak terdekat
+  const queryLower = sanitizedQuery.toLowerCase();
+  results.sort((a, b) => {
+    const aStartsWith = a.nama.toLowerCase().startsWith(queryLower);
+    const bStartsWith = b.nama.toLowerCase().startsWith(queryLower);
+
+    if (aStartsWith && !bStartsWith) return -1;
+    if (!aStartsWith && bStartsWith) return 1;
+
+    // Jika sama-sama prefix/sama-sama tidak, urutkan by jarak
+    return a.distanceM - b.distanceM;
+  });
+
+  return results;
 }
