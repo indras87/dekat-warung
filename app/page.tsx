@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getNearbyWarungs, type WarungDTO } from "@/lib/actions/warung";
 import { getCurrentUser, signOut } from "@/lib/actions/auth";
 import {
@@ -77,52 +77,60 @@ export default function DiscoveryPage() {
   return (
     <main className="bg-canvas-soft min-h-screen p-4 space-y-4">
       {/* Header */}
-      <header className="flex justify-between items-center bg-canvas-pure p-4 rounded-pill shadow-sm">
-        <h1 className="text-2xl font-black text-ink">Dekat Warung</h1>
-        <div className="flex items-center gap-2">
-          <span className="bg-lime-pale text-ink-deep text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
-            📍 Radius ≤ {DISCOVERY_RADIUS_M}m
-          </span>
-          {user ? (
-            <div className="flex items-center gap-2">
-              {user.role === "PEMBELI" && (
-                <>
-                  <Link
-                    href="/pesanan-saya"
-                    className="text-xs font-bold text-ink bg-lime-pale px-3 py-1.5 rounded-full hover:bg-lime transition-colors"
-                  >
-                    Pesanan Saya
-                  </Link>
-                  <Link
-                    href="/daftar-warung"
-                    className="text-xs font-bold text-canvas-pure bg-ink px-3 py-1.5 rounded-full hover:bg-ink-deep transition-colors"
-                  >
-                    Daftarkan Warung
-                  </Link>
-                </>
-              )}
+      <header className="bg-canvas-pure p-4 rounded-pill shadow-sm space-y-3">
+        {/* Top row: brand + user actions */}
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-black text-ink">Dekat Warung</h1>
+          <div className="flex items-center gap-2">
+            <span className="bg-lime-pale text-ink-deep text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
+              📍 Radius ≤ {DISCOVERY_RADIUS_M}m
+            </span>
+            {user ? (
+              <div className="flex items-center gap-2">
+                {user.role === "PEMBELI" && (
+                  <>
+                    <Link
+                      href="/pesanan-saya"
+                      className="text-xs font-bold text-ink bg-lime-pale px-3 py-1.5 rounded-full hover:bg-lime transition-colors"
+                    >
+                      Pesanan Saya
+                    </Link>
+                    <Link
+                      href="/daftar-warung"
+                      className="text-xs font-bold text-canvas-pure bg-ink px-3 py-1.5 rounded-full hover:bg-ink-deep transition-colors"
+                    >
+                      Daftarkan Warung
+                    </Link>
+                  </>
+                )}
+                <Link
+                  href={user.role === "WARUNG" ? "/warung-admin" : "/"}
+                  className="text-sm font-bold text-ink hover:underline"
+                >
+                  {user.nama}
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-xs font-bold text-body bg-canvas-soft px-3 py-1.5 rounded-full hover:bg-ink hover:text-lime transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
               <Link
-                href={user.role === "WARUNG" ? "/warung-admin" : "/"}
-                className="text-sm font-bold text-ink hover:underline"
+                href="/login"
+                className="text-xs font-bold text-ink bg-lime px-4 py-2 rounded-full hover:bg-lime-hover transition-colors"
               >
-                {user.nama}
+                Login
               </Link>
-              <button
-                onClick={handleLogout}
-                className="text-xs font-bold text-body bg-canvas-soft px-3 py-1.5 rounded-full hover:bg-ink hover:text-lime transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="text-xs font-bold text-ink bg-lime px-4 py-2 rounded-full hover:bg-lime-hover transition-colors"
-            >
-              Login
-            </Link>
-          )}
+            )}
+          </div>
         </div>
+
+        {/* Search bar - wrapped in Suspense */}
+        <Suspense fallback={<SearchBarFallback />}>
+          <SearchBar />
+        </Suspense>
       </header>
 
       {/* Hero */}
@@ -183,5 +191,48 @@ export default function DiscoveryPage() {
         </div>
       )}
     </main>
+  );
+}
+
+/** Search bar with useSearchParams - wrapped in Suspense boundary */
+function SearchBar() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  function handleSearchSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/cari?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  }
+
+  return (
+    <form onSubmit={handleSearchSubmit} className="flex gap-2">
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Cari Indomie, telur, minuman..."
+        className="flex-1 px-4 py-3 rounded-[16px] border-2 border-ink focus:border-lime focus:outline-none text-ink font-medium"
+        maxLength={60}
+      />
+      <button
+        type="submit"
+        className="px-6 py-3 bg-ink text-lime font-bold rounded-[16px] hover:bg-ink-deep transition-colors"
+      >
+        🔍
+      </button>
+    </form>
+  );
+}
+
+/** Fallback for Suspense boundary */
+function SearchBarFallback() {
+  return (
+    <div className="flex gap-2">
+      <div className="flex-1 h-12 bg-canvas-soft rounded-[16px] animate-pulse" />
+      <div className="w-16 h-12 bg-canvas-soft rounded-[16px] animate-pulse" />
+    </div>
   );
 }
