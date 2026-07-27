@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MerchantAlertModal } from "./MerchantAlertModal";
 import { MerchantBottomBar } from "./MerchantBottomBar";
 import { StatusBadge } from "./StatusBadge";
@@ -12,7 +12,6 @@ import {
 } from "@/lib/actions/order";
 import { formatRupiah, timeAgo } from "@/lib/format";
 import {
-  POLL_INTERVAL_MS,
   SERVICE_EMOJI,
   SERVICE_LABEL,
   PAYMENT_EMOJI,
@@ -30,19 +29,44 @@ export function MerchantTerminalClient({
   const [open, setOpen] = useState(warung.isOpen);
   const [orders, setOrders] = useState<OrderDTO[]>(initialOrders);
   const [filter, setFilter] = useState<"active" | "all">("active");
+  const evSourceRef = useRef<EventSource | null>(null);
 
+  // SSE connection untuk update pesanan realtime
   useEffect(() => {
-    let active = true;
-    async function tick() {
-      const list = await getOrdersForWarung(warung.id, filter === "active");
-      if (active) setOrders(list);
-    }
-    tick();
-    const id = setInterval(tick, POLL_INTERVAL_MS);
-    return () => {
-      active = false;
-      clearInterval(id);
+    const url = `/api/events/warung/${warung.id}`;
+    const ev = new EventSource(url);
+    evSourceRef.current = ev;
+
+    ev.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data) as {
+          orders: OrderDTO[];
+          newPending: string | null;
+        };
+
+        // Filter sesuai pilihan user (active/all)
+        const filtered =
+          filter === "active"
+            ? data.orders.filter((o) =>
+                ["PENDING", "DIPROSES", "SIAP"].includes(o.status),
+              )
+            : data.orders;
+
+        setOrders(filtered);
+      } catch {
+        /* parse error — abaikan */
+      }
     };
+
+    ev.onerror = () => {
+      // EventSource auto-reconnect
+    };
+
+    return () => {
+      ev.close();
+      evSourceRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [warung.id, filter]);
 
   async function toggleOpen() {

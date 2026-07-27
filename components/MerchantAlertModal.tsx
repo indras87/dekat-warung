@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  POLL_INTERVAL_MS,
   SERVICE_EMOJI,
   SERVICE_LABEL,
   PAYMENT_EMOJI,
@@ -21,42 +20,51 @@ type AudioHandle = {
 
 /**
  * Full-screen merchant alert modal + sound alarm (PRD §3.3 / design.md §2.2).
- * Polls the newest PENDING order; rings a Web-Audio bell loop until the merchant
- * accepts (→ DIPROSES) or rejects (→ BATAL).
+ * Menggunakan Server-Sent Events (SSE) untuk mendeteksi pesanan PENDING baru secara realtime.
+ * Berbunyi sampai merchant terima (→ DIPROSES) atau tolak (→ BATAL).
  */
 export function MerchantAlertModal({ warungId }: { warungId: string }) {
   const [order, setOrder] = useState<OrderDTO | null>(null);
   const [busy, setBusy] = useState(false);
   const ackRef = useRef<string | null>(null);
   const audioRef = useRef<AudioHandle | null>(null);
+  const evSourceRef = useRef<EventSource | null>(null);
 
-  // Poll newest pending order
+  // SSE connection untuk newest pending order
   useEffect(() => {
-    let active = true;
-    async function tick() {
+    const url = `/api/events/warung/${warungId}`;
+    const ev = new EventSource(url);
+    evSourceRef.current = ev;
+
+    ev.onmessage = (event) => {
       try {
-        const res = await fetch(`/api/warung/${warungId}/pending-order`, {
-          cache: "no-store",
-        });
-        const data = (await res.json()) as { order: OrderDTO | null };
-        if (!active) return;
-        const o = data.order;
-        if (o && o.id !== ackRef.current) {
-          setOrder(o);
+        const data = JSON.parse(event.data) as {
+          orders: OrderDTO[];
+          newPending: string | null;
+        };
+        const pending = data.orders.find((o) => o.status === "PENDING");
+        const newestPendingId = data.newPending;
+
+        if (pending && pending.id !== ackRef.current) {
+          setOrder(pending);
           startAlarm();
-        } else if (!o) {
+        } else if (!pending) {
           setOrder(null);
           stopAlarm();
         }
       } catch {
-        /* transient — keep last state */
+        /* parse error — abaikan, tick berikutnya akan memperbaiki */
       }
-    }
-    tick();
-    const id = setInterval(tick, POLL_INTERVAL_MS);
+    };
+
+    ev.onerror = () => {
+      // EventSource akan otomatis mencoba reconnect
+      // Tidak perlu manual handle
+    };
+
     return () => {
-      active = false;
-      clearInterval(id);
+      ev.close();
+      evSourceRef.current = null;
       stopAlarm();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

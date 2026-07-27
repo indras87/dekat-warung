@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { POLL_INTERVAL_MS, STATUS_LABEL } from "@/lib/constants";
+import { STATUS_LABEL } from "@/lib/constants";
 import { formatRupiah, timeAgo } from "@/lib/format";
 import type { OrderStatus, ServiceType, PaymentMethod } from "@prisma/client";
 
@@ -44,7 +44,9 @@ export default function OrderTrackingPage() {
   const id = params.id;
   const [order, setOrder] = useState<TrackedOrder | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const evSourceRef = useRef<EventSource | null>(null);
 
+  // Load awal (fallback bila SSE gagal)
   const load = useCallback(async () => {
     try {
       const res = await fetch(`/api/orders/${id}`, { cache: "no-store" });
@@ -59,11 +61,42 @@ export default function OrderTrackingPage() {
     }
   }, [id]);
 
+  // SSE connection untuk update status realtime
   useEffect(() => {
+    const url = `/api/events/order/${id}`;
+    const ev = new EventSource(url);
+    evSourceRef.current = ev;
+
+    ev.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data) as {
+          order: TrackedOrder | null;
+        };
+        if (data.order) {
+          setOrder(data.order);
+        } else {
+          // Order tidak ditemukan (mungkin dihapus)
+          setNotFound(true);
+        }
+      } catch {
+        /* parse error — abaikan */
+      }
+    };
+
+    ev.onerror = () => {
+      // EventSource auto-reconnect
+      // Fallback ke polling bila SSE error berkepanjangan bisa ditambahkan di sini
+    };
+
+    // Load awal untuk segera menampilkan data
     load();
-    const t = setInterval(load, POLL_INTERVAL_MS);
-    return () => clearInterval(t);
-  }, [load]);
+
+    return () => {
+      ev.close();
+      evSourceRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   if (notFound) {
     return (
