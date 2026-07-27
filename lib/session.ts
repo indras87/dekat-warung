@@ -86,3 +86,18 @@ export async function isAuthenticated(): Promise<boolean> {
   const session = await getSession();
   return !!session.userId;
 }
+
+/**
+ * Upgrade session ke role WARUNG setelah pendaftaran warung berhasil.
+ * Menyimpan ulang session dengan role baru dan warungId.
+ */
+export async function upgradeToWarungSession(
+  userId: string,
+  warungId: string,
+): Promise<void> {
+  await saveSession({
+    userId,
+    role: "WARUNG",
+    warungId,
+  });
+}
