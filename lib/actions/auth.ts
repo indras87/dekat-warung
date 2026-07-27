@@ -114,3 +114,46 @@ export async function getCurrentBuyerId(): Promise<string | null> {
   }
   return session.userId;
 }
+
+/**
+ * Mendaftarkan warung baru untuk user dan meng-upgrade session ke WARUNG.
+ * Server Action yang menggabungkan createWarungForUser + upgrade session.
+ */
+export async function registerWarungAndUpgradeSession(data: {
+  userId: string;
+  namaWarung: string;
+  latitude: number;
+  longitude: number;
+  deliveryFee: number;
+  isDeliveryAvailable: boolean;
+  acceptCash: boolean;
+  acceptQris: boolean;
+  acceptTransfer: boolean;
+  whatsappNumber?: string | null;
+}) {
+  const { createWarungForUser } = await import("@/lib/actions/warung");
+  const result = await createWarungForUser(data.userId, {
+    namaWarung: data.namaWarung,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    deliveryFee: data.deliveryFee,
+    isDeliveryAvailable: data.isDeliveryAvailable,
+    acceptCash: data.acceptCash,
+    acceptQris: data.acceptQris,
+    acceptTransfer: data.acceptTransfer,
+    whatsappNumber: data.whatsappNumber,
+  });
+
+  if (!result.success || !result.warung) {
+    return result;
+  }
+
+  // Upgrade session ke WARUNG
+  await saveSession({
+    userId: data.userId,
+    role: "WARUNG",
+    warungId: result.warung.id,
+  });
+
+  return result;
+}

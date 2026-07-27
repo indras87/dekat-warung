@@ -18,6 +18,14 @@ export default function LoginPage() {
         {/* Login Form */}
         <LoginClient />
 
+        {/* Daftar Warung link */}
+        <Link
+          href="/daftar-warung"
+          className="block text-center text-sm font-bold text-lime hover:underline"
+        >
+          Belum punya akun? Daftarkan Warung Anda
+        </Link>
+
         {/* Back link */}
         <Link
           href="/"

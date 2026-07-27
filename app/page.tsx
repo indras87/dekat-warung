@@ -86,12 +86,20 @@ export default function DiscoveryPage() {
           {user ? (
             <div className="flex items-center gap-2">
               {user.role === "PEMBELI" && (
-                <Link
-                  href="/pesanan-saya"
-                  className="text-xs font-bold text-ink bg-lime-pale px-3 py-1.5 rounded-full hover:bg-lime transition-colors"
-                >
-                  Pesanan Saya
-                </Link>
+                <>
+                  <Link
+                    href="/pesanan-saya"
+                    className="text-xs font-bold text-ink bg-lime-pale px-3 py-1.5 rounded-full hover:bg-lime transition-colors"
+                  >
+                    Pesanan Saya
+                  </Link>
+                  <Link
+                    href="/daftar-warung"
+                    className="text-xs font-bold text-canvas-pure bg-ink px-3 py-1.5 rounded-full hover:bg-ink-deep transition-colors"
+                  >
+                    Daftarkan Warung
+                  </Link>
+                </>
               )}
               <Link
                 href={user.role === "WARUNG" ? "/warung-admin" : "/"}

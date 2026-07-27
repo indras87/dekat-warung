@@ -90,3 +90,85 @@ export async function updateWarungSettings(
   const w = await prisma.warung.update({ where: { id }, data });
   return toDTO(w);
 }
+
+export interface CreateWarungInput {
+  namaWarung: string;
+  latitude: number;
+  longitude: number;
+  deliveryFee: number;
+  isDeliveryAvailable: boolean;
+  acceptCash: boolean;
+  acceptQris: boolean;
+  acceptTransfer: boolean;
+  whatsappNumber?: string | null;
+}
+
+export interface CreateWarungResult {
+  success: boolean;
+  warung?: WarungDTO;
+  error?: string;
+}
+
+/**
+ * Membuat warung baru untuk user tertentu.
+ * Membungkus update role User dan create Warung dalam satu transaction.
+ * Satu user hanya boleh memiliki satu warung (ownerId @unique di schema).
+ */
+export async function createWarungForUser(
+  ownerId: string,
+  data: CreateWarungInput,
+): Promise<CreateWarungResult> {
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. Update role User menjadi WARUNG
+      const user = await tx.user.update({
+        where: { id: ownerId },
+        data: { role: "WARUNG" },
+      });
+
+      // 2. Buat Warung dengan ownerId
+      const warung = await tx.warung.create({
+        data: {
+          ownerId: user.id,
+          namaWarung: data.namaWarung,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          deliveryFee: data.deliveryFee,
+          isDeliveryAvailable: data.isDeliveryAvailable,
+          acceptCash: data.acceptCash,
+          acceptQris: data.acceptQris,
+          acceptTransfer: data.acceptTransfer,
+          whatsappNumber: data.whatsappNumber,
+          isOpen: true, // Default buka saat pendaftaran
+        },
+      });
+
+      return { user, warung };
+    });
+
+    return {
+      success: true,
+      warung: toDTO(result.warung),
+    };
+  } catch (error: any) {
+    // Tangani error uniqueness (satu user = satu warung)
+    if (error.code === "P2002") {
+      return {
+        success: false,
+        error: "Anda sudah memiliki warung. Satu user hanya boleh mendaftarkan satu warung.",
+      };
+    }
+    // Tangani error user tidak ditemukan (P2025)
+    if (error.code === "P2025") {
+      return {
+        success: false,
+        error: "User tidak ditemukan.",
+      };
+    }
+    console.error("createWarungForUser error:", error);
+    return {
+      success: false,
+      error: "Gagal mendaftarkan warung. Silakan coba lagi.",
+    };
+  }
+}
