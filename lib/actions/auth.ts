@@ -5,6 +5,7 @@ import { saveSession, destroySession, getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import type { Role } from "@prisma/client";
 
+/** Hasil proses sign in: status, pesan error opsional, dan URL redirect opsional. */
 export interface SignInResult {
   success: boolean;
   error?: string;

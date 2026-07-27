@@ -6,6 +6,10 @@ import { RATE_LIMIT } from "@/lib/constants";
 // Buyer tracking polling: current order state.
 export const dynamic = "force-dynamic";
 
+/**
+ * Endpoint polling fallback: mengembalikan status terkini satu order beserta item & warung-nya untuk tracking pembeli.
+ * Diproteksi rate limit POLLING; force-dynamic agar selalu membaca DB terbaru.
+ */
 export const GET = withRateLimit(
   RATE_LIMIT.POLLING,
   async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {

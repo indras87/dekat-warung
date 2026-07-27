@@ -1,13 +1,13 @@
 "use client";
 
-/**
- * Komponen PushOptIn - Tombol aktifkan notifikasi push
- * Menampilkan status izin notifikasi dan handle subscribe/unsubscribe.
- */
 import { useEffect, useState } from "react";
 
 type PermissionState = "granted" | "denied" | "default" | "not-supported";
 
+/**
+ * Komponen PushOptIn - Tombol aktifkan notifikasi push
+ * Menampilkan status izin notifikasi dan handle subscribe/unsubscribe.
+ */
 export function PushOptIn() {
   const [permission, setPermission] =
     useState<PermissionState>("default");

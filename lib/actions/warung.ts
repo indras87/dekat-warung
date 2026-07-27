@@ -12,6 +12,9 @@ export type WarungDTO = Omit<Warung, "createdAt" | "updatedAt"> & {
   distanceM?: number;
 };
 
+/**
+ * Mengkonversi entity Warung menjadi DTO serializable dengan Date → ISO string.
+ */
 function toDTO(w: Warung & { distanceM?: number }): WarungDTO {
   return {
     ...w,
@@ -38,6 +41,9 @@ export async function getNearbyWarungs(
   return withDist.map(toDTO);
 }
 
+/**
+ * Mengambil satu warung berdasarkan id; mengembalikan null jika tidak ditemukan.
+ */
 export async function getWarungById(id: string): Promise<WarungDTO | null> {
   const w = await prisma.warung.findUnique({ where: { id } });
   return w ? toDTO(w) : null;
@@ -69,11 +75,17 @@ export async function getCurrentMerchantWarung(): Promise<WarungDTO | null> {
   return w ? toDTO(w) : null;
 }
 
+/**
+ * Mengubah status buka/tutup warung berdasarkan id.
+ */
 export async function setWarungOpen(id: string, isOpen: boolean): Promise<WarungDTO> {
   const w = await prisma.warung.update({ where: { id }, data: { isOpen } });
   return toDTO(w);
 }
 
+/**
+ * Memperbarui pengaturan warung (nama, ongkir, opsi pengiriman, metode pembayaran, QRIS, WhatsApp) berdasarkan id.
+ */
 export async function updateWarungSettings(
   id: string,
   data: {

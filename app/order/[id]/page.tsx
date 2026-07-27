@@ -48,6 +48,11 @@ const BANNER: Record<OrderStatus, { box: string; title: string; pulse?: boolean 
   BATAL: { box: "bg-[#320707] text-white", title: "Pesanan Dibatalkan ❌" },
 };
 
+/**
+ * Halaman tracking pesanan realtime untuk Pembeli: subscribe SSE status pesanan
+ * via /api/events/order/{id}, menampilkan banner status, instruksi pembayaran
+ * QRIS/Transfer, detail item, serta link WhatsApp warung.
+ */
 export default function OrderTrackingPage() {
   const params = useParams<{ id: string }>();
   const id = params.id;
@@ -57,6 +62,10 @@ export default function OrderTrackingPage() {
   const evSourceRef = useRef<EventSource | null>(null);
 
   // Load awal (fallback bila SSE gagal)
+  /**
+   * Memuat data pesanan via fetch ke /api/orders/{id} sebagai data awal dan
+   * cadangan bila SSE belum mengirim update; menandai notFound bila respons 404.
+   */
   const load = useCallback(async () => {
     try {
       const res = await fetch(`/api/orders/${id}`, { cache: "no-store" });
@@ -108,6 +117,10 @@ export default function OrderTrackingPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  /**
+   * Menandai pesanan non-tunai (QRIS/Transfer) sebagai "sudah dibayar" pembeli
+   * via markPaidByBuyer dan memperbarui state order dengan hasil yang dikembalikan.
+   */
   async function handleMarkPaid(orderId: string) {
     setMarkingPaid(true);
     try {

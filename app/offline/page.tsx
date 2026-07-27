@@ -3,6 +3,10 @@
 // Halaman fallback offline untuk PWA
 // Ditampilkan ketika user offline dan navigasi ke route yang belum di-cache
 
+/**
+ * Halaman fallback offline PWA: menampilkan pesan koneksi terputus dan tombol
+ * coba lagi saat user navigasi ke route yang belum di-cache saat offline.
+ */
 export default function OfflinePage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-canvas-soft px-4">

@@ -12,6 +12,11 @@ import {
 } from "@/lib/constants";
 import { formatDistance } from "@/lib/format";
 
+/**
+ * Halaman beranda/Discovery untuk Pembeli: mendeteksi lokasi pengguna dan
+ * menampilkan daftar warung aktif dalam radius ≤ 200m, search bar, serta akses
+ * login/daftar warung.
+ */
 export default function DiscoveryPage() {
   const router = useRouter();
   const [warungs, setWarungs] = useState<WarungDTO[]>([]);
@@ -23,6 +28,10 @@ export default function DiscoveryPage() {
     let cancelled = false;
 
     // Load user data
+    /**
+     * Memuat data user saat ini dari session untuk menampilkan menu sesuai peran
+     * (PEMBELI/WARUNG); gagal senyap bila belum login.
+     */
     async function loadUser() {
       try {
         const userData = await getCurrentUser();
@@ -35,6 +44,10 @@ export default function DiscoveryPage() {
     }
 
     // Load warungs
+    /**
+     * Mengambil daftar warung terdekat berdasarkan koordinat (lat, lng) dan
+     * memperbarui label lokasi serta state loading warung.
+     */
     async function load(lat: number, lng: number, label: string) {
       setLocLabel(label);
       try {
@@ -68,6 +81,10 @@ export default function DiscoveryPage() {
     };
   }, []);
 
+  /**
+   * Melakukan logout (signOut), menghapus state user lokal, dan me-refresh
+   * route untuk mereset data sesi.
+   */
   async function handleLogout() {
     await signOut();
     setUser(null);
@@ -200,6 +217,10 @@ function SearchBar() {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
 
+  /**
+   * Handler submit form pencarian: mencegah reload halaman lalu navigasi ke
+   * /cari dengan query yang di-encode.
+   */
   function handleSearchSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (searchQuery.trim()) {

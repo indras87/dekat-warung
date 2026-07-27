@@ -25,6 +25,9 @@ export type OrderDTO = Omit<Order, "createdAt" | "updatedAt" | "paidAt"> & {
   warung?: WarungDTO;
 };
 
+/**
+ * Mengkonversi entity Order (beserta relasi) menjadi DTO serializable dengan Date → ISO string.
+ */
 function toOrderDTO(o: Order & { items: OrderItem[]; warung?: Warung }): OrderDTO {
   return {
     ...o,
@@ -62,6 +65,10 @@ async function nextOrderNumber(): Promise<string> {
   return `ORD-${seq}`;
 }
 
+/**
+ * Membuat pesanan baru dari input checkout pembeli.
+ * Memvalidasi item/enum/panjang string, menghitung subtotal-ongkir-total, menyimpan ke DB, lalu mengembalikan DTO order.
+ */
 export async function createOrder(input: CreateOrderInput): Promise<OrderDTO> {
   // --- Validasi input ketat (security) ---
 
@@ -134,6 +141,9 @@ export async function createOrder(input: CreateOrderInput): Promise<OrderDTO> {
   return toOrderDTO(order);
 }
 
+/**
+ * Mengambil satu pesanan beserta item dan data warung-nya berdasarkan id; mengembalikan null jika tidak ditemukan.
+ */
 export async function getOrderById(id: string): Promise<OrderDTO | null> {
   const o = await prisma.order.findUnique({
     where: { id },
@@ -142,6 +152,10 @@ export async function getOrderById(id: string): Promise<OrderDTO | null> {
   return o ? toOrderDTO(o) : null;
 }
 
+/**
+ * Mengambil daftar pesanan untuk sebuah warung, terurut terbaru.
+ * Jika onlyActive true, hanya menyertakan pesanan berstatus PENDING/DIPROSES/SIAP.
+ */
 export async function getOrdersForWarung(
   warungId: string,
   onlyActive = false,
@@ -169,6 +183,10 @@ export async function getNewestPendingOrder(
   return o ? toOrderDTO(o) : null;
 }
 
+/**
+ * Memperbarui status pesanan beserta efek sampingnya (hapus expiresAt saat DIPROSES, set LUNAS_TUNAI saat SELESAI).
+ * Mengirim push notification ke pembeli secara fire-and-forget bila buyerId tersedia.
+ */
 export async function updateOrderStatus(
   id: string,
   status: OrderStatus,

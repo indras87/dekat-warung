@@ -31,6 +31,11 @@ interface Props {
 
 const ALL_STATUSES: OrderStatus[] = ["PENDING", "DIPROSES", "SIAP", "SELESAI", "BATAL"];
 
+/**
+ * Halaman laporan merchant: KPI omzet/pesanan/AOV, grafik omzet 7 hari terakhir,
+ * produk terlaris, dan distribusi status pesanan. Menampilkan empty state bila
+ * belum ada pesanan berstatus SELESAI.
+ */
 export function LaporanClient({
   warungId,
   dailyRevenue,
@@ -138,6 +143,7 @@ export function LaporanClient({
   );
 }
 
+/** Kartu KPI kecil yang menampilkan satu label dan satu nilai (omzet/jumlah/AOV). */
 function KPICard({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-white rounded-3xl p-4 text-center">

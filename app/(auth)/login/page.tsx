@@ -3,6 +3,10 @@ import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Halaman Login untuk semua peran: menampilkan form LoginClient (autentikasi
+ * PEMBELI/WARUNG) serta link menuju pendaftaran warung dan beranda.
+ */
 export default function LoginPage() {
   return (
     <main className="bg-canvas-soft min-h-screen p-4 flex items-center justify-center">

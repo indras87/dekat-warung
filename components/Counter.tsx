@@ -12,6 +12,7 @@ export function Counter({
   min?: number;
   max?: number;
 }) {
+  /** Helper penahan (clamp) nilai ke rentang [min, max] sebelum dikembalikan via onChange. */
   const set = (n: number) => onChange(Math.max(min, Math.min(max, n)));
   return (
     <div className="flex items-center gap-3 bg-canvas-soft p-1.5 rounded-[16px]">

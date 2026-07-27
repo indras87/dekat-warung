@@ -9,6 +9,7 @@ export function haversineMeters(
   lng2: number,
 ): number {
   const R = 6371000; // Earth radius (m)
+  /** Konversi derajat menjadi radian. */
   const toRad = (deg: number) => (deg * Math.PI) / 180;
   const dLat = toRad(lat2 - lat1);
   const dLng = toRad(lng2 - lng1);

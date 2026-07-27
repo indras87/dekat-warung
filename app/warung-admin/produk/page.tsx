@@ -4,6 +4,11 @@ import { ProdukClient } from "@/components/ProdukClient";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Halaman manajemen Produk untuk role WARUNG: server component yang mengambil
+ * daftar produk & kategori warung lalu merender ProdukClient untuk melakukan
+ * CRUD produk.
+ */
 export default async function ProdukPage() {
   // Middleware sudah proteksi route ini - hanya user WARUNG yang bisa akses
   const warung = await getCurrentMerchantWarung();

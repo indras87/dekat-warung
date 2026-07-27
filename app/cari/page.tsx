@@ -6,6 +6,11 @@ interface PageProps {
   searchParams: Promise<{ q?: string; lat?: string; lng?: string }>;
 }
 
+/**
+ * Halaman pencarian produk untuk Pembeli: server component yang membaca query
+ * (q, lat, lng) dari searchParams, menjalankan searchProducts dalam radius
+ * discovery, lalu meneruskan hasil awal ke SearchClient.
+ */
 export default async function CariPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const query = params.q ?? "";

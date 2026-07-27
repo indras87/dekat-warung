@@ -8,14 +8,23 @@ import { DISCOVERY_RADIUS_M } from "@/lib/constants";
 export type ProductDTO = Omit<Product, "createdAt"> & { createdAt: string };
 export type CategoryDTO = Omit<Category, "products">;
 
+/**
+ * Mengkonversi entity Product menjadi DTO serializable dengan Date → ISO string.
+ */
 function toProductDTO(p: Product): ProductDTO {
   return { ...p, createdAt: p.createdAt.toISOString() };
 }
 
+/**
+ * Mengkonversi entity Category menjadi DTO dengan field id, warungId, dan nama.
+ */
 function toCategoryDTO(c: Category): CategoryDTO {
   return { id: c.id, warungId: c.warungId, nama: c.nama };
 }
 
+/**
+ * Mengambil daftar produk milik sebuah warung, diurutkan berdasarkan ketersediaan lalu nama.
+ */
 export async function getProductsByWarung(warungId: string): Promise<ProductDTO[]> {
   const list = await prisma.product.findMany({
     where: { warungId },
@@ -36,6 +45,9 @@ export async function toggleProductStock(
   return toProductDTO(p);
 }
 
+/**
+ * Membuat produk baru untuk sebuah warung dengan isAvailable default true.
+ */
 export async function createProduct(data: {
   warungId: string;
   nama: string;
@@ -56,6 +68,9 @@ export async function createProduct(data: {
   return toProductDTO(p);
 }
 
+/**
+ * Memperbarui field produk (nama/harga/categoryId/imageUrl) berdasarkan id.
+ */
 export async function updateProduct(
   id: string,
   data: {
@@ -72,6 +87,9 @@ export async function updateProduct(
   return toProductDTO(p);
 }
 
+/**
+ * Menghapus produk berdasarkan id.
+ */
 export async function deleteProduct(id: string): Promise<void> {
   await prisma.product.delete({
     where: { id },
@@ -87,6 +105,9 @@ export async function getCategoriesByWarung(warungId: string): Promise<CategoryD
   return list.map(toCategoryDTO);
 }
 
+/**
+ * Membuat kategori baru untuk sebuah warung.
+ */
 export async function createCategory(
   warungId: string,
   nama: string,
@@ -97,6 +118,9 @@ export async function createCategory(
   return toCategoryDTO(c);
 }
 
+/**
+ * Menghapus kategori berdasarkan id.
+ */
 export async function deleteCategory(id: string): Promise<void> {
   await prisma.category.delete({
     where: { id },

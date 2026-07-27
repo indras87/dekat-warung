@@ -11,6 +11,10 @@ const TABS = [
   { href: "/warung-admin/pengaturan", label: "Atur", icon: "⚙️", exact: false },
 ];
 
+/**
+ * Navigasi bawah 5 tab untuk Merchant Terminal (Kasir, Stok, Produk, Laporan,
+ * Atur). Menandai tab aktif berdasarkan pathname dan melampirkan warungId di query.
+ */
 export function MerchantBottomBar({ warungId }: { warungId: string }) {
   const pathname = usePathname();
   return (

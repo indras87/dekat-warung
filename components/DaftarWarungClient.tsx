@@ -14,6 +14,11 @@ interface DaftarWarungClientProps {
   userId: string;
 }
 
+/**
+ * Form onboarding pendaftaran warung untuk pembeli yang ingin jadi merchant.
+ * Mengambil koordinat GPS otomatis lalu memanggil Server Action
+ * `registerWarungAndUpgradeSession` saat submit.
+ */
 export function DaftarWarungClient({ userId }: DaftarWarungClientProps) {
   const router = useRouter();
 
@@ -54,6 +59,10 @@ export function DaftarWarungClient({ userId }: DaftarWarungClientProps) {
     );
   }, []);
 
+  /**
+   * Handler submit form: validasi input, daftarkan warung lewat Server Action,
+   * lalu redirect ke terminal warung. Menampilkan error bila gagal.
+   */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);

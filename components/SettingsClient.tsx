@@ -5,6 +5,7 @@ import { updateWarungSettings, type WarungDTO } from "@/lib/actions/warung";
 import { MerchantBottomBar } from "./MerchantBottomBar";
 import { ImageUpload } from "./ImageUpload";
 
+/** Halaman pengaturan warung merchant: nama, tarif antar, WhatsApp, foto QRIS, serta toggle layanan & metode pembayaran. */
 export function SettingsClient({ warung }: { warung: WarungDTO }) {
   const [namaWarung, setNamaWarung] = useState(warung.namaWarung);
   const [deliveryFee, setDeliveryFee] = useState(warung.deliveryFee);
@@ -21,6 +22,7 @@ export function SettingsClient({ warung }: { warung: WarungDTO }) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  /** Handler simpan: memanggil Server Action updateWarungSettings dan menampilkan indikator "Tersimpan". */
   async function save() {
     setSaving(true);
     setSaved(false);
@@ -139,6 +141,7 @@ export function SettingsClient({ warung }: { warung: WarungDTO }) {
   );
 }
 
+/** Saklar on/off berlabel yang dipakai pada bagian Layanan & Pembayaran halaman pengaturan. */
 function Toggle({
   label,
   checked,

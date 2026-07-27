@@ -18,6 +18,9 @@ interface SubscribeRequest {
   };
 }
 
+/**
+ * Handler inti subscribe: memvalidasi method, session user, dan payload subscription lalu menyimpannya via push lib.
+ */
 async function handler(req: Request) {
   try {
     // Hanya izinkan POST
@@ -54,7 +57,9 @@ async function handler(req: Request) {
   }
 }
 
-// Bungkus dengan rate limit: 10 request per menit per IP
+/**
+ * Ekspor handler POST terbungkus rate limit (10 request/menit/IP).
+ */
 export const POST = withRateLimit(
   { capacity: 10, refillPerSec: 10 / 60 },
   handler,

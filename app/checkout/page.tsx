@@ -16,6 +16,11 @@ import {
 } from "@/lib/constants";
 import type { ServiceType, PaymentMethod } from "@prisma/client";
 
+/**
+ * Halaman Checkout untuk Pembeli: menampilkan ringkasan keranjang, form nama
+ * pemesan, pilihan pengiriman (PICKUP/ANTERIN) dan pembayaran, lalu membuat
+ * pesanan via createOrder dan redirect ke halaman tracking pesanan.
+ */
 export default function CheckoutPage() {
   const router = useRouter();
   const {
@@ -51,6 +56,11 @@ export default function CheckoutPage() {
     { key: "TRANSFER", allowed: warung?.acceptTransfer ?? false },
   ];
 
+  /**
+   * Mengirim pesanan ke server (createOrder) lengkap dengan data keranjang,
+   * buyerId session, layanan & pembayaran terpilih; lalu redirect ke /order/{id}
+   * atau menampilkan error bila gagal.
+   */
   async function handleSubmit() {
     if (!warungId || !canOrder) return;
     setSubmitting(true);

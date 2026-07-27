@@ -12,6 +12,9 @@ interface UnsubscribeRequest {
   endpoint: string;
 }
 
+/**
+ * Handler inti unsubscribe: memvalidasi method dan payload `endpoint` lalu menghapus subscription via push lib.
+ */
 async function handler(req: Request) {
   try {
     if (req.method !== "POST") {
@@ -39,7 +42,9 @@ async function handler(req: Request) {
   }
 }
 
-// Bungkus dengan rate limit: 10 request per menit per IP
+/**
+ * Ekspor handler POST terbungkus rate limit (10 request/menit/IP).
+ */
 export const POST = withRateLimit(
   { capacity: 10, refillPerSec: 10 / 60 },
   handler,

@@ -43,6 +43,10 @@ const EMPTY: CartState = {
   customNote: "",
 };
 
+/**
+ * Context provider keranjang belanja: menyimpan warung aktif, daftar item,
+ * dan catatan kustom, serta persist state ke localStorage.
+ */
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<CartState>(EMPTY);
 
@@ -65,12 +69,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [state]);
 
+  /** Menetapkan warung aktif; mengosongkan keranjang bila warung berubah. */
   const setWarung = useCallback((id: string, name: string) => {
     setState((s) =>
       s.warungId === id ? s : { ...EMPTY, warungId: id, warungName: name },
     );
   }, []);
 
+  /**
+   * Mengatur jumlah (qty) sebuah produk di keranjang.
+   * Bila `qty` ≤ 0, produk dihapus dari keranjang.
+   */
   const setQty = useCallback(
     (productId: string, productName: string, price: number, qty: number) => {
       setState((s) => {
@@ -82,16 +91,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  /** Memperbarui catatan kustom pesanan pada keranjang. */
   const setCustomNote = useCallback((note: string) => {
     setState((s) => ({ ...s, customNote: note }));
   }, []);
 
+  /** Mengosongkan seluruh isi keranjang kembali ke state awal. */
   const clear = useCallback(() => setState(EMPTY), []);
 
+  /** Total kuantitas seluruh item di keranjang. */
   const itemCount = useMemo(
     () => state.items.reduce((n, i) => n + i.qty, 0),
     [state.items],
   );
+  /** Total harga seluruh item di keranjang (price × qty). */
   const subtotal = useMemo(
     () => state.items.reduce((s, i) => s + i.price * i.qty, 0),
     [state.items],
@@ -110,6 +123,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
+/**
+ * Hook untuk mengakses context keranjang.
+ * Throw bila dipanggil di luar `CartProvider`.
+ */
 export function useCart(): CartContextValue {
   const ctx = useContext(CartContext);
   if (!ctx) throw new Error("useCart must be used within CartProvider");

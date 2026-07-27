@@ -4,6 +4,10 @@ import { useState } from "react";
 import { signIn } from "@/lib/actions/auth";
 import { useRouter } from "next/navigation";
 
+/**
+ * Form login (nama/no. HP + PIN 6 digit) yang memanggil Server Action `signIn`
+ * dan mengalihkan pengguna ke URL sesuai peran saat berhasil.
+ */
 export function LoginClient() {
   const router = useRouter();
   const [nama, setNama] = useState("");
@@ -11,6 +15,7 @@ export function LoginClient() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  /** Handler submit: panggil Server Action signIn, redirect bila sukses atau tampilkan error. */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!nama.trim() || !pin.trim()) return;

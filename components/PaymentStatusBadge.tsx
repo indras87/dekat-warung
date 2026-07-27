@@ -13,6 +13,7 @@ const BADGE_STYLE: Record<PaymentStatus, string> = {
   LUNAS_TUNAI: "bg-lime-pale text-positive-deep",
 };
 
+/** Badge berwarna + emoji yang merepresentasikan status pembayaran sebuah pesanan. */
 export function PaymentStatusBadge({ status }: Props) {
   return (
     <span

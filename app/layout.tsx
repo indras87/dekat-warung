@@ -23,6 +23,10 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
+/**
+ * Root layout aplikasi: membungkus seluruh halaman dengan Providers dan
+ * menetapkan metadata global serta viewport PWA (lang "id", tema Wise).
+ */
 export default function RootLayout({
   children,
 }: {
