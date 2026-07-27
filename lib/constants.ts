@@ -1,5 +1,5 @@
 // Dekat Warung — domain constants & display labels
-import type { OrderStatus, ServiceType, PaymentMethod } from "@prisma/client";
+import type { OrderStatus, ServiceType, PaymentMethod, PaymentStatus } from "@prisma/client";
 
 /** Hyper-local discovery radius (PRD: ≤ 200m). */
 export const DISCOVERY_RADIUS_M = 200;
@@ -44,6 +44,22 @@ export const PAYMENT_EMOJI: Record<PaymentMethod, string> = {
   CASH: "💵",
   QRIS: "📱",
   TRANSFER: "🏦",
+};
+
+export const PAYMENT_STATUS_LABEL: Record<PaymentStatus, string> = {
+  BELUM_BAYAR: "Belum Bayar",
+  MENUNGGU: "Menunggu Verifikasi",
+  TERKONFIRMASI: "Lunas",
+  DITOLAK: "Ditolak",
+  LUNAS_TUNAI: "Tunai",
+};
+
+export const PAYMENT_STATUS_EMOJI: Record<PaymentStatus, string> = {
+  BELUM_BAYAR: "⏳",
+  MENUNGGU: "⏳",
+  TERKONFIRMASI: "✅",
+  DITOLAK: "❌",
+  LUNAS_TUNAI: "💵",
 };
 
 /**
