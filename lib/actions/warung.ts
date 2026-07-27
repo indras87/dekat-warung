@@ -43,9 +43,29 @@ export async function getWarungById(id: string): Promise<WarungDTO | null> {
   return w ? toDTO(w) : null;
 }
 
-/** Demo MVP: first warung owns the merchant terminal (no auth yet). */
+/** Demo MVP: first warung owns the merchant terminal (no auth yet). @deprecated gunakan getCurrentMerchantWarung */
 export async function getDefaultMerchantWarung(): Promise<WarungDTO | null> {
   const w = await prisma.warung.findFirst({ orderBy: { createdAt: "asc" } });
+  return w ? toDTO(w) : null;
+}
+
+/**
+ * Mendapatkan warung yang dimiliki oleh user yang sedang login.
+ * Hanya untuk role WARUNG. Return null jika user tidak login atau bukan WARUNG.
+ */
+export async function getCurrentMerchantWarung(): Promise<WarungDTO | null> {
+  const { getSession } = await import("@/lib/session");
+  const session = await getSession();
+
+  // Hanya role WARUNG yang memiliki warung
+  if (!session.userId || session.role !== "WARUNG" || !session.warungId) {
+    return null;
+  }
+
+  const w = await prisma.warung.findUnique({
+    where: { id: session.warungId },
+  });
+
   return w ? toDTO(w) : null;
 }
 
