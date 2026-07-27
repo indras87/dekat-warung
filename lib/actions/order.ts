@@ -8,7 +8,7 @@ import {
   assertEnum,
 } from "@/lib/security";
 import { sendPush } from "@/lib/push";
-import type { Order, OrderItem, OrderStatus, PaymentMethod, ServiceType, Warung } from "@prisma/client";
+import type { Order, OrderItem, OrderStatus, PaymentMethod, PaymentStatus, ServiceType, Warung } from "@prisma/client";
 
 export type OrderItemDTO = OrderItem;
 
@@ -17,9 +17,10 @@ export type WarungDTO = Omit<Warung, "createdAt" | "updatedAt"> & {
   updatedAt: string;
 };
 
-export type OrderDTO = Omit<Order, "createdAt" | "updatedAt"> & {
+export type OrderDTO = Omit<Order, "createdAt" | "updatedAt" | "paidAt"> & {
   createdAt: string;
   updatedAt: string;
+  paidAt: string | null;
   items: OrderItemDTO[];
   warung?: WarungDTO;
 };
@@ -29,6 +30,7 @@ function toOrderDTO(o: Order & { items: OrderItem[]; warung?: Warung }): OrderDT
     ...o,
     createdAt: o.createdAt.toISOString(),
     updatedAt: o.updatedAt.toISOString(),
+    paidAt: o.paidAt ? o.paidAt.toISOString() : null,
     items: o.items,
     warung: o.warung
       ? {
@@ -119,6 +121,7 @@ export async function createOrder(input: CreateOrderInput): Promise<OrderDTO> {
       buyerId: finalBuyerId,
       serviceType: input.serviceType,
       paymentMethod: input.paymentMethod,
+      paymentStatus: "BELUM_BAYAR",
       customNote: input.customNote ?? null,
       subtotal,
       deliveryFee,
@@ -176,6 +179,9 @@ export async function updateOrderStatus(
       status,
       // Hapus expiresAt saat merchant terima order (DIPROSES)
       expiresAt: status === "DIPROSES" ? null : undefined,
+      // Set LUNAS_TUNAI untuk pembayaran CASH saat SELESAI
+      paymentStatus:
+        status === "SELESAI" ? { set: "LUNAS_TUNAI" } : undefined,
     },
     include: { items: true, warung: true },
   });
@@ -248,4 +254,82 @@ export async function cancelStaleOrders(): Promise<number> {
     data: { status: "BATAL" },
   });
   return result.count;
+}
+
+/**
+ * Pembeli menandai bahwa mereka sudah membayar (QRIS/TRANSFER).
+ * Idempoten: jika sudah MENUNGGU, tidak berubah.
+ * Hanya untuk non-CASH.
+ */
+export async function markPaidByBuyer(orderId: string): Promise<OrderDTO> {
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+  });
+
+  if (!order) {
+    throw new Error("Pesanan tidak ditemukan");
+  }
+
+  if (order.paymentMethod === "CASH") {
+    throw new Error("Pembayaran tunai diverifikasi saat pesanan selesai");
+  }
+
+  // Idempoten: jika sudah MENUNGGU atau TERKONFIRMASI, tidak perlu update
+  if (order.paymentStatus === "MENUNGGU" || order.paymentStatus === "TERKONFIRMASI") {
+    return getOrderById(orderId) as Promise<OrderDTO>;
+  }
+
+  const updated = await prisma.order.update({
+    where: { id: orderId },
+    data: { paymentStatus: "MENUNGGU" },
+    include: { items: true, warung: true },
+  });
+
+  return toOrderDTO(updated);
+}
+
+/**
+ * Merchant mengkonfirmasi pembayaran (setelah pembeli klik "Saya Sudah Bayar").
+ * Set TERKONFIRMASI dan paidAt = now.
+ */
+export async function confirmPayment(orderId: string): Promise<OrderDTO> {
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+  });
+
+  if (!order) {
+    throw new Error("Pesanan tidak ditemukan");
+  }
+
+  const updated = await prisma.order.update({
+    where: { id: orderId },
+    data: {
+      paymentStatus: "TERKONFIRMASI",
+      paidAt: new Date(),
+    },
+    include: { items: true, warung: true },
+  });
+
+  return toOrderDTO(updated);
+}
+
+/**
+ * Merchant menolak pembayaran (bukti tidak valid).
+ */
+export async function rejectPayment(orderId: string): Promise<OrderDTO> {
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+  });
+
+  if (!order) {
+    throw new Error("Pesanan tidak ditemukan");
+  }
+
+  const updated = await prisma.order.update({
+    where: { id: orderId },
+    data: { paymentStatus: "DITOLAK" },
+    include: { items: true, warung: true },
+  });
+
+  return toOrderDTO(updated);
 }

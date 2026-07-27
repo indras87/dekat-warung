@@ -4,10 +4,13 @@ import { useEffect, useState, useRef } from "react";
 import { MerchantAlertModal } from "./MerchantAlertModal";
 import { MerchantBottomBar } from "./MerchantBottomBar";
 import { StatusBadge } from "./StatusBadge";
+import { PaymentStatusBadge } from "./PaymentStatusBadge";
 import { setWarungOpen, type WarungDTO } from "@/lib/actions/warung";
 import {
   getOrdersForWarung,
   updateOrderStatus,
+  confirmPayment,
+  rejectPayment,
   type OrderDTO,
 } from "@/lib/actions/order";
 import { formatRupiah, timeAgo } from "@/lib/format";
@@ -17,7 +20,7 @@ import {
   PAYMENT_EMOJI,
   PAYMENT_LABEL,
 } from "@/lib/constants";
-import type { OrderStatus } from "@prisma/client";
+import type { OrderStatus, PaymentStatus } from "@prisma/client";
 
 export function MerchantTerminalClient({
   warung,
@@ -81,6 +84,24 @@ export function MerchantTerminalClient({
       prev.map((o) => (o.id === orderId ? { ...o, status } : o)),
     );
     await updateOrderStatus(orderId, status);
+  }
+
+  async function handleConfirmPayment(orderId: string) {
+    setOrders((prev) =>
+      prev.map((o) =>
+        o.id === orderId ? { ...o, paymentStatus: "TERKONFIRMASI" as PaymentStatus } : o
+      ),
+    );
+    await confirmPayment(orderId);
+  }
+
+  async function handleRejectPayment(orderId: string) {
+    setOrders((prev) =>
+      prev.map((o) =>
+        o.id === orderId ? { ...o, paymentStatus: "DITOLAK" as PaymentStatus } : o
+      ),
+    );
+    await rejectPayment(orderId);
   }
 
   return (
@@ -147,7 +168,13 @@ export function MerchantTerminalClient({
         ) : (
           <div className="space-y-4">
             {orders.map((o) => (
-              <OrderCard key={o.id} order={o} onStatus={setStatus} />
+              <OrderCard
+                key={o.id}
+                order={o}
+                onStatus={setStatus}
+                onConfirmPayment={handleConfirmPayment}
+                onRejectPayment={handleRejectPayment}
+              />
             ))}
           </div>
         )}
@@ -162,9 +189,13 @@ export function MerchantTerminalClient({
 function OrderCard({
   order,
   onStatus,
+  onConfirmPayment,
+  onRejectPayment,
 }: {
   order: OrderDTO;
   onStatus: (id: string, status: OrderStatus) => void;
+  onConfirmPayment: (id: string) => void;
+  onRejectPayment: (id: string) => void;
 }) {
   return (
     <article className="bg-canvas-pure border-2 border-ink rounded-pill p-5 space-y-4 shadow-sm">
@@ -177,6 +208,7 @@ function OrderCard({
         </div>
         <div className="flex flex-col items-end gap-1">
           <StatusBadge status={order.status} />
+          <PaymentStatusBadge status={order.paymentStatus} />
           <span className="bg-lime-pale text-ink-deep text-xs font-black px-3 py-1 rounded-full">
             {SERVICE_EMOJI[order.serviceType]}{" "}
             {SERVICE_LABEL[order.serviceType].toUpperCase()}
@@ -209,6 +241,26 @@ function OrderCard({
           {PAYMENT_LABEL[order.paymentMethod].toUpperCase()}
         </span>
       </div>
+
+      {/* Payment verification actions untuk non-CASH */}
+      {order.paymentMethod !== "CASH" && order.paymentStatus === "MENUNGGU" && (
+        <div className="grid grid-cols-2 gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => onRejectPayment(order.id)}
+            className="h-14 bg-canvas-soft text-negative font-bold rounded-[16px]"
+          >
+            Tolak Bayar
+          </button>
+          <button
+            type="button"
+            onClick={() => onConfirmPayment(order.id)}
+            className="h-14 bg-lime text-ink font-black text-lg rounded-[16px] hover:bg-lime-hover"
+          >
+            Konfirmasi Bayar
+          </button>
+        </div>
+      )}
 
       {/* Status-driven actions */}
       <div className="grid grid-cols-2 gap-3 pt-2">
