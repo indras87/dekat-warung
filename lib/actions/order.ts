@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { ORDER_PENDING_TTL_MS } from "@/lib/constants";
 import type { Order, OrderItem, OrderStatus, PaymentMethod, ServiceType, Warung } from "@prisma/client";
 
 export type OrderItemDTO = OrderItem;
@@ -75,6 +76,7 @@ export async function createOrder(input: CreateOrderInput): Promise<OrderDTO> {
       subtotal,
       deliveryFee,
       totalAmount,
+      expiresAt: new Date(Date.now() + ORDER_PENDING_TTL_MS),
       items: { create: input.items },
     },
     include: { items: true },
@@ -123,7 +125,11 @@ export async function updateOrderStatus(
 ): Promise<OrderDTO> {
   const o = await prisma.order.update({
     where: { id },
-    data: { status },
+    data: {
+      status,
+      // Hapus expiresAt saat merchant terima order (DIPROSES)
+      expiresAt: status === "DIPROSES" ? null : undefined,
+    },
     include: { items: true, warung: true },
   });
   return toOrderDTO(o);
@@ -141,4 +147,20 @@ export async function getOrdersByBuyer(
     include: { warung: true, items: true },
   });
   return list.map(toOrderDTO);
+}
+
+/**
+ * Batalkan otomatis order PENDING yang sudah melewati expiresAt.
+ * Dipanggil oleh cleanup worker dan cron endpoint.
+ * @returns jumlah order yang dibatalkan
+ */
+export async function cancelStaleOrders(): Promise<number> {
+  const result = await prisma.order.updateMany({
+    where: {
+      status: "PENDING",
+      expiresAt: { lt: new Date() },
+    },
+    data: { status: "BATAL" },
+  });
+  return result.count;
 }
