@@ -160,3 +160,31 @@ async function handleDefault(request) {
     return new Response("Offline - konten tidak tersedia", { status: 503 });
   }
 }
+
+// --- Push Notification Handlers ---
+
+/** Event push: terima payload dan tampilkan notifikasi */
+self.addEventListener("push", (event) => {
+  const data = event.data?.json();
+  if (!data) return;
+
+  const options = {
+    body: data.body || "",
+    icon: "/icon.svg",
+    badge: "/icons/icon-192.png",
+    vibrate: [200, 100, 200],
+    data: data.url || "/pesanan-saya",
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title || "Dekat Warung", options)
+  );
+});
+
+/** Event klik notifikasi: buka URL yang sesuai */
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  const url = event.notification.data || "/pesanan-saya";
+  event.waitUntil(clients.openWindow(url));
+});

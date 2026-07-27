@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { STATUS_LABEL } from "@/lib/constants";
 import { formatRupiah, timeAgo } from "@/lib/format";
+import { PushOptIn } from "@/components/PushOptIn";
 import type { OrderStatus, ServiceType, PaymentMethod } from "@prisma/client";
 
 type TrackedOrder = {
@@ -147,6 +148,11 @@ export default function OrderTrackingPage() {
         <p className="text-xs font-bold opacity-80">
           Status: {STATUS_LABEL[order.status]} · {timeAgo(order.createdAt)}
         </p>
+      </section>
+
+      {/* Push Opt-in */}
+      <section className="bg-canvas-pure rounded-pill p-4 flex justify-center">
+        <PushOptIn />
       </section>
 
       {/* Details */}
