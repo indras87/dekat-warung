@@ -1,22 +1,35 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import type { Order, OrderItem, OrderStatus, PaymentMethod, ServiceType } from "@prisma/client";
+import type { Order, OrderItem, OrderStatus, PaymentMethod, ServiceType, Warung } from "@prisma/client";
 
 export type OrderItemDTO = OrderItem;
+
+export type WarungDTO = Omit<Warung, "createdAt" | "updatedAt"> & {
+  createdAt: string;
+  updatedAt: string;
+};
 
 export type OrderDTO = Omit<Order, "createdAt" | "updatedAt"> & {
   createdAt: string;
   updatedAt: string;
   items: OrderItemDTO[];
+  warung?: WarungDTO;
 };
 
-function toOrderDTO(o: Order & { items: OrderItem[] }): OrderDTO {
+function toOrderDTO(o: Order & { items: OrderItem[]; warung?: Warung }): OrderDTO {
   return {
     ...o,
     createdAt: o.createdAt.toISOString(),
     updatedAt: o.updatedAt.toISOString(),
     items: o.items,
+    warung: o.warung
+      ? {
+          ...o.warung,
+          createdAt: o.warung.createdAt.toISOString(),
+          updatedAt: o.warung.updatedAt.toISOString(),
+        }
+      : undefined,
   };
 }
 
@@ -72,7 +85,7 @@ export async function createOrder(input: CreateOrderInput): Promise<OrderDTO> {
 export async function getOrderById(id: string): Promise<OrderDTO | null> {
   const o = await prisma.order.findUnique({
     where: { id },
-    include: { items: true },
+    include: { items: true, warung: true },
   });
   return o ? toOrderDTO(o) : null;
 }
@@ -86,7 +99,7 @@ export async function getOrdersForWarung(
     : { warungId };
   const list = await prisma.order.findMany({
     where,
-    include: { items: true },
+    include: { items: true, warung: true },
     orderBy: { createdAt: "desc" },
   });
   return list.map(toOrderDTO);
@@ -98,7 +111,7 @@ export async function getNewestPendingOrder(
 ): Promise<OrderDTO | null> {
   const o = await prisma.order.findFirst({
     where: { warungId, status: "PENDING" },
-    include: { items: true },
+    include: { items: true, warung: true },
     orderBy: { createdAt: "desc" },
   });
   return o ? toOrderDTO(o) : null;
@@ -111,7 +124,21 @@ export async function updateOrderStatus(
   const o = await prisma.order.update({
     where: { id },
     data: { status },
-    include: { items: true },
+    include: { items: true, warung: true },
   });
   return toOrderDTO(o);
+}
+
+/** Mengambil daftar pesanan pembeli berdasarkan userId, terurut terbaru. */
+export async function getOrdersByBuyer(
+  userId: string,
+  limit = 50,
+): Promise<OrderDTO[]> {
+  const list = await prisma.order.findMany({
+    where: { buyerId: userId },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    include: { warung: true, items: true },
+  });
+  return list.map(toOrderDTO);
 }
