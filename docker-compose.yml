@@ -22,12 +22,23 @@ services:
   app:
     build: .
     container_name: dekat-warung-app
+    # In-container DATABASE_URL points at the `db` service over the compose
+    # network (overrides any DATABASE_URL from .env, which targets the host).
     environment:
       DATABASE_URL: "postgresql://dekat:dekat@db:5432/dekat_warung?schema=public"
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: "1"
+    # Pass runtime secrets (SESSION_SECRET, VAPID_*, CRON_SECRET, ...) from the
+    # host .env. `.dockerignore` excludes .env from the image on purpose, so the
+    # container receives them here. Explicit `environment` above still wins for
+    # DATABASE_URL.
+    env_file:
+      - .env
+    # Host port 3001 (not 3000): a host Next.js / another container may already
+    # occupy 3000. Override with DEKAT_HOST_PORT if needed. Container still
+    # listens on 3000 internally.
     ports:
-      - "3000:3000"
+      - "${DEKAT_HOST_PORT:-3001}:3000"
     depends_on:
       db:
         condition: service_healthy
