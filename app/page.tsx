@@ -85,6 +85,14 @@ export default function DiscoveryPage() {
           </span>
           {user ? (
             <div className="flex items-center gap-2">
+              {user.role === "PEMBELI" && (
+                <Link
+                  href="/pesanan-saya"
+                  className="text-xs font-bold text-ink bg-lime-pale px-3 py-1.5 rounded-full hover:bg-lime transition-colors"
+                >
+                  Pesanan Saya
+                </Link>
+              )}
               <Link
                 href={user.role === "WARUNG" ? "/warung-admin" : "/"}
                 className="text-sm font-bold text-ink hover:underline"
