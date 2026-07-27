@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getNearbyWarungs, type WarungDTO } from "@/lib/actions/warung";
+import { getCurrentUser, signOut } from "@/lib/actions/auth";
 import {
   DEFAULT_BUYER_LAT,
   DEFAULT_BUYER_LNG,
@@ -11,12 +13,28 @@ import {
 import { formatDistance } from "@/lib/format";
 
 export default function DiscoveryPage() {
+  const router = useRouter();
   const [warungs, setWarungs] = useState<WarungDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [locLabel, setLocLabel] = useState("Mendeteksi lokasi…");
+  const [user, setUser] = useState<{ id: string; nama: string; role: string } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+
+    // Load user data
+    async function loadUser() {
+      try {
+        const userData = await getCurrentUser();
+        if (!cancelled && userData) {
+          setUser({ id: userData.id, nama: userData.nama, role: userData.role });
+        }
+      } catch (e) {
+        // Silent fail - user not logged in
+      }
+    }
+
+    // Load warungs
     async function load(lat: number, lng: number, label: string) {
       setLocLabel(label);
       try {
@@ -26,6 +44,8 @@ export default function DiscoveryPage() {
         if (!cancelled) setLoading(false);
       }
     }
+
+    loadUser();
 
     if (!("geolocation" in navigator)) {
       load(DEFAULT_BUYER_LAT, DEFAULT_BUYER_LNG, "Bojongsoang (default)");
@@ -48,14 +68,45 @@ export default function DiscoveryPage() {
     };
   }, []);
 
+  async function handleLogout() {
+    await signOut();
+    setUser(null);
+    router.refresh();
+  }
+
   return (
     <main className="bg-canvas-soft min-h-screen p-4 space-y-4">
       {/* Header */}
       <header className="flex justify-between items-center bg-canvas-pure p-4 rounded-pill shadow-sm">
         <h1 className="text-2xl font-black text-ink">Dekat Warung</h1>
-        <span className="bg-lime-pale text-ink-deep text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
-          📍 Radius ≤ {DISCOVERY_RADIUS_M}m
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="bg-lime-pale text-ink-deep text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
+            📍 Radius ≤ {DISCOVERY_RADIUS_M}m
+          </span>
+          {user ? (
+            <div className="flex items-center gap-2">
+              <Link
+                href={user.role === "WARUNG" ? "/warung-admin" : "/"}
+                className="text-sm font-bold text-ink hover:underline"
+              >
+                {user.nama}
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="text-xs font-bold text-body bg-canvas-soft px-3 py-1.5 rounded-full hover:bg-ink hover:text-lime transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="text-xs font-bold text-ink bg-lime px-4 py-2 rounded-full hover:bg-lime-hover transition-colors"
+            >
+              Login
+            </Link>
+          )}
+        </div>
       </header>
 
       {/* Hero */}
