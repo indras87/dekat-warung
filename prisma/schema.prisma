@@ -98,6 +98,7 @@ model Product {
   nama        String
   harga       Int
   isAvailable Boolean  @default(true)
+  imageUrl    String?  // URL gambar produk (diisi via plan 07 nanti)
   createdAt   DateTime @default(now())
 
   @@index([warungId])
