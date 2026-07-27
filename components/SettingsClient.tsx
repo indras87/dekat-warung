@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { updateWarungSettings, type WarungDTO } from "@/lib/actions/warung";
 import { MerchantBottomBar } from "./MerchantBottomBar";
+import { ImageUpload } from "./ImageUpload";
 
 export function SettingsClient({ warung }: { warung: WarungDTO }) {
   const [namaWarung, setNamaWarung] = useState(warung.namaWarung);
@@ -92,15 +93,12 @@ export function SettingsClient({ warung }: { warung: WarungDTO }) {
         </div>
 
         <div>
-          <label htmlFor="qris" className={label}>
-            URL Foto QRIS (opsional)
-          </label>
-          <input
-            id="qris"
-            value={qrisImageUrl}
-            onChange={(e) => setQrisImageUrl(e.target.value)}
+          <ImageUpload
+            value={qrisImageUrl || null}
+            onChange={(url) => setQrisImageUrl(url ?? "")}
+            label="Foto QRIS (opsional)"
             placeholder="https://…/qris.png"
-            className={field}
+            disabled={saving}
           />
         </div>
       </section>
