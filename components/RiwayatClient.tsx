@@ -10,6 +10,7 @@ interface RiwayatClientProps {
   initialOrders: OrderDTO[];
 }
 
+/** Halaman daftar "Pesanan Saya" untuk pembeli; menampilkan empty state bila belum ada pesanan. */
 export function RiwayatClient({ initialOrders }: RiwayatClientProps) {
   // TODO: Bila plan 03 sudah merge, tambahkan SSE subscription untuk update real-time
   // const [orders, setOrders] = useState<OrderDTO[]>(initialOrders);

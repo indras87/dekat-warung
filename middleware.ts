@@ -17,6 +17,9 @@ interface SessionData {
   warungId?: string;
 }
 
+/**
+ * Mengembalikan opsi konfigurasi iron-session (secret & cookie name) dari environment variable.
+ */
 function getSessionOptions() {
   return {
     password: process.env.SESSION_SECRET || "fallback_minimum_32_characters_secret_change_me",

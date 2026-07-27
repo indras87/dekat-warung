@@ -6,6 +6,7 @@ import type { ProductDTO } from "@/lib/actions/product";
 import { formatRupiah } from "@/lib/format";
 import { MerchantBottomBar } from "./MerchantBottomBar";
 
+/** Halaman kelola stok merchant: toggle cepat status Ada/Habis per produk via Server Action toggleProductStock. */
 export function StockClient({
   warungId,
   initialProducts,
@@ -16,6 +17,7 @@ export function StockClient({
   const [products, setProducts] = useState(initialProducts);
   const [busyId, setBusyId] = useState<string | null>(null);
 
+  /** Toggle ketersediaan produk (optimistic UI + Server Action toggleProductStock). */
   async function toggle(id: string, current: boolean) {
     setBusyId(id);
     const updated = await toggleProductStock(id, !current);

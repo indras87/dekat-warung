@@ -41,6 +41,10 @@ export function makeSSEStream<T>(options: SSEOptions<T>): Response {
     async start(controller) {
       let lastHeartbeat = Date.now();
 
+      /**
+       * Satu iterasi polling SSE: kirim heartbeat bila perlu, ambil data via
+       * fetcher, lalu jadwalkan tick berikutnya sampai klien disconnect.
+       */
       async function tick() {
         // Cek abort signal (klien disconnect)
         if (signal.aborted) {

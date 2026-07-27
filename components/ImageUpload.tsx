@@ -15,6 +15,10 @@ interface ImageUploadProps {
   disabled?: boolean;
 }
 
+/**
+ * Input gambar untuk form merchant: tombol upload file (POST /api/upload) plus
+ * fallback input URL manual, lengkap dengan pratinjau gambar dan state loading/error.
+ */
 export function ImageUpload({
   value,
   onChange,
@@ -27,7 +31,7 @@ export function ImageUpload({
   const [manualUrl, setManualUrl] = useState(value ?? "");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Handle file selection & upload
+  /** Handler pemilihan file: upload ke /api/upload lalu teruskan URL hasil ke onChange. */
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -63,7 +67,7 @@ export function ImageUpload({
     }
   };
 
-  // Handle manual URL input
+  /** Handler input URL manual: sinkronkan nilai teks ke onChange (null bila kosong). */
   const handleManualUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
     setManualUrl(url);

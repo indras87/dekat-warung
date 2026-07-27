@@ -6,6 +6,10 @@ import { RATE_LIMIT } from "@/lib/constants";
 // Wajib nodejs untuk akses file system
 export const runtime = "nodejs";
 
+/**
+ * Endpoint upload gambar: menerima field `file` dari multipart form, menyimpannya via saveImageFile, dan mengembalikan URL publik.
+ * Runtime nodejs (akses filesystem); diproteksi rate limit UPLOAD.
+ */
 export const POST = withRateLimit(
   RATE_LIMIT.UPLOAD,
   async (req: Request) => {

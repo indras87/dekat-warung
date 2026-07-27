@@ -10,6 +10,10 @@ declare global {
   var __dwCleanup: boolean | undefined;
 }
 
+/**
+ * Memulai worker periodik yang membatalkan order PENDING yang stale.
+ * Dilindungi guard `globalThis` agar hanya satu instance aktif per proses.
+ */
 export function startCleanupWorker(): void {
   // Guard: pastikan hanya satu instance per proses
   if (globalThis.__dwCleanup) {

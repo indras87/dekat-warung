@@ -7,6 +7,11 @@ import { MerchantTerminalClient } from "@/components/MerchantTerminalClient";
 // prerendered at build time (Docker build has no live Postgres).
 export const dynamic = "force-dynamic";
 
+/**
+ * Halaman Terminal Warung untuk role WARUNG: server component yang mengambil
+ * data warung & pesanan aktif, menampilkan prompt bila warung belum terhubung,
+ * lalu merender MerchantTerminalClient untuk mengelola pesanan secara realtime.
+ */
 export default async function TerminalPage() {
   // Middleware sudah proteksi route ini - hanya user WARUNG yang bisa akses
   const warung = await getCurrentMerchantWarung();

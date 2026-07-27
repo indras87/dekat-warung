@@ -70,6 +70,7 @@ export function MerchantAlertModal({ warungId }: { warungId: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [warungId]);
 
+  /** Memulai alarm bel berulang (osilator 880Hz berdenyut setiap 500ms) memakai Web Audio API. */
   function startAlarm() {
     stopAlarm();
     try {
@@ -100,6 +101,7 @@ export function MerchantAlertModal({ warungId }: { warungId: string }) {
     }
   }
 
+  /** Menghentikan loop alarm dan menutup AudioContext yang sedang aktif. */
   function stopAlarm() {
     const a = audioRef.current;
     if (!a) return;
@@ -123,6 +125,7 @@ export function MerchantAlertModal({ warungId }: { warungId: string }) {
     return () => window.removeEventListener("pointerdown", resume);
   }, []);
 
+  /** Handler tombol Terima/Tolak: update status pesanan via Server Action lalu tutup modal & hentikan alarm. */
   async function act(status: "DIPROSES" | "BATAL") {
     if (!order || busy) return;
     setBusy(true);

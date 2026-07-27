@@ -8,6 +8,11 @@ import { formatRupiah } from "@/lib/format";
 import type { WarungDTO } from "@/lib/actions/warung";
 import type { ProductDTO } from "@/lib/actions/product";
 
+/**
+ * Halaman etalase produk sebuah warung untuk pembeli. Menampilkan info warung,
+ * input permintaan custom, daftar produk dengan stepper qty (Counter), dan
+ * floating cart bar menuju checkout. Mengikat warung aktif ke cart global saat mount.
+ */
 export function EtalaseClient({
   warung,
   products,
@@ -30,6 +35,7 @@ export function EtalaseClient({
     setWarung(warung.id, warung.namaWarung);
   }, [warung.id, warung.namaWarung, setWarung]);
 
+  /** Mengambil qty sebuah produk dari item cart saat ini (0 bila belum ada di cart). */
   const qtyOf = (pid: string) =>
     items.find((i) => i.productId === pid)?.qty ?? 0;
 

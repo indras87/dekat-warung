@@ -9,6 +9,11 @@ import { LaporanClient } from "@/components/LaporanClient";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Halaman Laporan untuk role WARUNG: server component yang mengambil agregasi
+ * pendapatan harian, jumlah pesanan per status, dan produk terlaris, lalu
+ * meneruskannya ke LaporanClient untuk divisualisasikan.
+ */
 export default async function LaporanPage() {
   const warung = await getCurrentMerchantWarung();
 

@@ -22,6 +22,11 @@ import {
 } from "@/lib/constants";
 import type { OrderStatus, PaymentStatus } from "@prisma/client";
 
+/**
+ * Layar utama Merchant Terminal: daftar pesanan realtime via SSE dengan filter
+ * aktif/semua, toggle buka/tutup warung, verifikasi pembayaran non-Tunai, serta
+ * aksi lanjutan per status pesanan. Menampilkan MerchantAlertModal & MerchantBottomBar.
+ */
 export function MerchantTerminalClient({
   warung,
   initialOrders,
@@ -72,6 +77,7 @@ export function MerchantTerminalClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [warung.id, filter]);
 
+  /** Toggle status buka/tutup warung secara optimistic, lalu sinkronkan via Server Action setWarungOpen. */
   async function toggleOpen() {
     const next = !open;
     setOpen(next); // optimistic
@@ -79,6 +85,7 @@ export function MerchantTerminalClient({
     setOpen(w.isOpen);
   }
 
+  /** Update status sebuah pesanan (optimistic UI + Server Action updateOrderStatus). */
   async function setStatus(orderId: string, status: OrderStatus) {
     setOrders((prev) =>
       prev.map((o) => (o.id === orderId ? { ...o, status } : o)),
@@ -86,6 +93,7 @@ export function MerchantTerminalClient({
     await updateOrderStatus(orderId, status);
   }
 
+  /** Konfirmasi pembayaran pesanan (optimistic UI + Server Action confirmPayment). */
   async function handleConfirmPayment(orderId: string) {
     setOrders((prev) =>
       prev.map((o) =>
@@ -95,6 +103,7 @@ export function MerchantTerminalClient({
     await confirmPayment(orderId);
   }
 
+  /** Tolak pembayaran pesanan (optimistic UI + Server Action rejectPayment). */
   async function handleRejectPayment(orderId: string) {
     setOrders((prev) =>
       prev.map((o) =>
@@ -186,6 +195,11 @@ export function MerchantTerminalClient({
   );
 }
 
+/**
+ * Kartu satu pesanan di terminal: detail item, total, badge status & pembayaran,
+ * tombol verifikasi pembayaran untuk non-Tunai, serta tombol aksi lanjutan per
+ * status pesanan (Terima/Tolak, Siap, Selesai).
+ */
 function OrderCard({
   order,
   onStatus,

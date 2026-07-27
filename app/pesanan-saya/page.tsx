@@ -3,6 +3,11 @@ import { getOrdersByBuyer } from "@/lib/actions/order";
 import { RiwayatClient } from "@/components/RiwayatClient";
 import Link from "next/link";
 
+/**
+ * Halaman "Pesanan Saya" untuk Pembeli: server component yang mengambil riwayat
+ * pesanan via session dan merender RiwayatClient, atau menampilkan prompt
+ * login bila belum masuk.
+ */
 export default async function PesananSayaPage() {
   const session = await getSession();
 

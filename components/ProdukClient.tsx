@@ -25,6 +25,11 @@ type EditingProduct = {
   imageUrl?: string | null;
 };
 
+/**
+ * Halaman kelola produk & kategori merchant: form tambah produk, daftar produk
+ * dengan aksi edit/hapus, manajer kategori (collapsible), dan modal edit produk.
+ * Semua mutasi memakai Server Actions melalui useTransition.
+ */
 export function ProdukClient({
   warungId,
   initialProducts,
@@ -47,7 +52,7 @@ export function ProdukClient({
   const [showCategoryManager, setShowCategoryManager] = useState(false);
   const [newCategoryNama, setNewCategoryNama] = useState("");
 
-  // Create product
+  /** Handler tambah produk baru via Server Action createProduct; mereset form setelah sukses. */
   const handleCreateProduct = () => {
     if (!newNama.trim() || !newHarga) return;
 
@@ -70,7 +75,7 @@ export function ProdukClient({
     });
   };
 
-  // Delete product
+  /** Handler hapus produk (dengan konfirmasi) via Server Action deleteProduct. */
   const handleDeleteProduct = (id: string) => {
     if (!confirm("Yakin ingin menghapus produk ini?")) return;
 
@@ -80,7 +85,7 @@ export function ProdukClient({
     });
   };
 
-  // Open edit modal
+  /** Membuka modal edit dengan mengisi form dari nilai produk yang dipilih. */
   const openEditModal = (product: ProductDTO) => {
     setEditingProduct({
       id: product.id,
@@ -91,7 +96,7 @@ export function ProdukClient({
     });
   };
 
-  // Update product
+  /** Handler simpan perubahan produk via Server Action updateProduct; menutup modal bila sukses. */
   const handleUpdateProduct = () => {
     if (!editingProduct) return;
     if (!editingProduct.nama.trim() || editingProduct.harga <= 0) return;
@@ -110,7 +115,7 @@ export function ProdukClient({
     });
   };
 
-  // Create category
+  /** Handler tambah kategori baru via Server Action createCategory. */
   const handleCreateCategory = () => {
     if (!newCategoryNama.trim()) return;
 
@@ -121,7 +126,7 @@ export function ProdukClient({
     });
   };
 
-  // Delete category
+  /** Handler hapus kategori (dengan konfirmasi) via Server Action deleteCategory; membersihkan referensi kategori pada produk. */
   const handleDeleteCategory = (id: string) => {
     if (!confirm("Yakin ingin menghapus kategori ini? Produk akan kehilangan kategori.")) return;
 

@@ -4,6 +4,10 @@ interface BarChartProps {
   data: { label: string; value: number }[];
 }
 
+/**
+ * Diagram batang vertikal sederhana yang merender omzet harian; tinggi tiap batang
+ * dihitung proporsional terhadap nilai maksimum daftar data.
+ */
 export function BarChart({ data }: BarChartProps) {
   const maxValue = Math.max(...data.map((d) => d.value), 1); // Avoid division by zero
 

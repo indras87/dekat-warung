@@ -9,6 +9,7 @@ const STYLE: Record<OrderStatus, string> = {
   BATAL: "bg-negative text-white",
 };
 
+/** Badge berwarna + emoji yang merepresentasikan status pesanan (PENDING/DIPROSES/SIAP/SELESAI/BATAL). */
 export function StatusBadge({
   status,
   size = "sm",

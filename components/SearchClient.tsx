@@ -21,6 +21,12 @@ interface GroupedResult {
   products: ProductWithWarungDTO[];
 }
 
+/**
+ * Halaman pencarian produk hyper-local untuk pembeli: input query dengan debounce,
+ * pengambilan koordinat GPS otomatis, pemanggilan Server Action searchProducts
+ * dalam radius discovery, dan menampilkan hasil dikelompokkan per warung (terurut
+ * berdasarkan jarak terdekat).
+ */
 export default function SearchClient({
   initialQ,
   initialLat,
@@ -77,6 +83,7 @@ export default function SearchClient({
 
   // Panggil searchProducts ketika debouncedQuery berubah
   useEffect(() => {
+    /** Eksekusi pencarian via Server Action searchProducts dan memperbarui state hasil/loading. */
     async function doSearch() {
       if (!debouncedQuery.trim()) {
         setResults([]);
@@ -104,6 +111,7 @@ export default function SearchClient({
   }, [debouncedQuery, userLat, userLng]);
 
   // Kelompokkan hasil per warung
+  /** Mengelompokkan hasil pencarian per warung dan mengurutkannya berdasarkan jarak terdekat. */
   const groupedResults = useCallback((): GroupedResult[] => {
     const groups = new Map<string, GroupedResult>();
 
@@ -125,10 +133,12 @@ export default function SearchClient({
     return Array.from(groups.values()).sort((a, b) => a.distanceM - b.distanceM);
   }, [results]);
 
+  /** Handler perubahan input pencarian; akan memicu debounce 300ms sebelum query dikirim. */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
+  /** Handler submit form: menjalankan pencarian langsung tanpa menunggu debounce. */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setDebouncedQuery(query);
