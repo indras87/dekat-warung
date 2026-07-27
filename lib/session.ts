@@ -30,10 +30,16 @@ function getSessionOptions(): SessionOptions {
   };
 }
 
-/** Mendapatkan session saat ini. Dapat dipanggil dari Server Component/Action. */
-export async function getSession(): Promise<SessionData> {
+/** Mendapatkan session object iron-session (dengan method save & destroy). */
+async function getIronSessionObject() {
   const sessionOptions = getSessionOptions();
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const cookieStore = await cookies();
+  return getIronSession<SessionData>(cookieStore, sessionOptions);
+}
+
+/** Mendapatkan session data saat ini. Dapat dipanggil dari Server Component/Action. */
+export async function getSession(): Promise<SessionData> {
+  const session = await getIronSessionObject();
 
   // Default values jika session kosong (first visit)
   if (!session.userId) {
@@ -41,12 +47,16 @@ export async function getSession(): Promise<SessionData> {
     session.role = "PEMBELI" as Role;
   }
 
-  return session;
+  return {
+    userId: session.userId,
+    role: session.role,
+    warungId: session.warungId,
+  };
 }
 
 /** Menyimpan data ke session (update/create). */
 export async function saveSession(data: SessionData): Promise<void> {
-  const session = await getSession();
+  const session = await getIronSessionObject();
   session.userId = data.userId;
   session.role = data.role;
   session.warungId = data.warungId;
@@ -55,7 +65,7 @@ export async function saveSession(data: SessionData): Promise<void> {
 
 /** Menghapus session (logout). */
 export async function destroySession(): Promise<void> {
-  const session = await getSession();
+  const session = await getIronSessionObject();
   session.destroy();
 }
 

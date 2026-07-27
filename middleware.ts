@@ -29,7 +29,8 @@ export async function middleware(request: NextRequest) {
 
   // Hanya proteksi route /warung-admin/*
   if (pathname.startsWith("/warung-admin")) {
-    const session = await getIronSession<SessionData>(cookies(), getSessionOptions());
+    const cookieStore = await cookies();
+    const session = await getIronSession<SessionData>(cookieStore, getSessionOptions());
 
     // Cek apakah user login dan role WARUNG
     if (!session.userId || session.role !== "WARUNG") {
