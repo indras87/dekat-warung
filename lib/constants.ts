@@ -52,3 +52,9 @@ export const PAYMENT_EMOJI: Record<PaymentMethod, string> = {
  * Klien menerima event realtime via EventSource (Server-Sent Events).
  */
 export const POLL_INTERVAL_MS = 4000;
+
+/** TTL untuk order PENDING sebelum auto-cancel (5 menit). */
+export const ORDER_PENDING_TTL_MS = 5 * 60 * 1000;
+
+/** Interval cleanup worker untuk cek & batalkan order stale (1 menit). */
+export const CLEANUP_INTERVAL_MS = 60 * 1000;
