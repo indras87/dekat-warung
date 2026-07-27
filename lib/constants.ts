@@ -46,5 +46,9 @@ export const PAYMENT_EMOJI: Record<PaymentMethod, string> = {
   TRANSFER: "🏦",
 };
 
-/** Polling interval for realtime status checks (ms). */
+/**
+ * Interval SSE internal server (ms).
+ * Dipakai di lib/sse.ts sebagai tick fetcher — bukan polling klien.
+ * Klien menerima event realtime via EventSource (Server-Sent Events).
+ */
 export const POLL_INTERVAL_MS = 4000;
